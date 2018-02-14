@@ -1,0 +1,4 @@
+<launch>
+  <machine name="ubiquityrobot" address="ubiquityrobot" user="ubuntu" password="ubuntu" env-loader="/opt/ros/kinetic/env.sh"/>
+  <node pkg="rostopic" type="rostopic" name="talker" args="pub /chatter std_msgs/String 'Blah blah' -r 1" machine="ubiquityrobot"/>
+</launch>
