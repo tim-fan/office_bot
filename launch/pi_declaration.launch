@@ -6,6 +6,6 @@
     name="raspberry-pi" 
     address="ubiquityrobot"
     user="ubuntu"
-    env-loader="/opt/ros/kinetic/env.sh"
+    env-loader="/home/ubuntu/env.sh"
   />
 </launch>
