@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<!-- declaration of the remote raspberry pi -->
+
+<launch>
+  <machine
+    name="raspberry-pi" 
+    address="ubiquityrobot"
+    user="ubuntu"
+    env-loader="/opt/ros/kinetic/env.sh"
+  />
+</launch>
