@@ -1,4 +1,8 @@
+<?xml version="1.0"?>
+<!-- simple test that a node can be set up on the remote machine -->
+
 <launch>
   <machine name="ubiquityrobot" address="ubiquityrobot" user="ubuntu" password="ubuntu" env-loader="/opt/ros/kinetic/env.sh"/>
   <node pkg="rostopic" type="rostopic" name="talker" args="pub /chatter std_msgs/String 'Blah blah' -r 1" machine="ubiquityrobot"/>
+  <node pkg="rostopic" type="rostopic" name="listener" args="echo /chatter"/>
 </launch>

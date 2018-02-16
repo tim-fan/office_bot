@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<!-- launch a laser driver on the remote machine -->
+
+<launch>
+  <machine 
+    name="ubiquityrobot" 
+    address="ubiquityrobot" 
+    user="ubuntu" 
+    password="ubuntu" 
+    env-loader="/home/ubuntu/env.sh"
+  />
+    
+  <node pkg="urg_node" type="urg_node" name="urg_node" machine="ubiquityrobot" required="true"/>
+</launch>
