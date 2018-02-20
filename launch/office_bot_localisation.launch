@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+
+<!-- Main launch file for office bot in localisation mode
+    Supports selection of localisation algorithm via input argument
+ -->
+
+<launch>
+  <arg name="input_log_file" default="" doc="If specified, the given log is used to provide sensor data. Otherwise a live connection to the sensor will be made"/>
+  <arg name="algorithm" default="amcl" doc="Name of localisation algorithm to run (amcl or cartographer)"/>
+      
+  <include file="$(find office_bot)/launch/laser_source.launch">
+      <arg name="input_log_file" value="$(arg input_log_file)"/>
+  </include>
+  
+  
+  <group if="$(eval algorithm == 'cartographer')">
+      <node name="rviz" pkg="rviz" type="rviz" required="true"
+          args="-d $(find office_bot)/cfg/cartographer_view.rviz" />
+
+      <node name="cartographer_node" pkg="cartographer_ros"
+          type="cartographer_node" args="
+              -configuration_directory $(find office_bot)/cfg
+              -configuration_basename office_bot_localisation.lua
+              -map_filename $(find office_bot)/cfg/officeMap.pbstream"
+          output="screen"/>
+  </group>
+  
+  
+  <group if="$(eval algorithm == 'amcl')">    
+    <!-- running cartographer just as a laser-odometry source -->
+    <node name="cartographer_node" pkg="cartographer_ros"
+        type="cartographer_node" args="
+            -configuration_directory $(find office_bot)/cfg
+            -configuration_basename office_bot_odom.lua"/>
+      
+    <node name="rviz" pkg="rviz" type="rviz" required="true"
+        args="-d $(find office_bot)/cfg/amcl_view.rviz" />
+        
+    <node name="map_server" pkg="map_server" type="map_server"
+        args="$(find office_bot)/cfg/officeMap.yaml"/>  
+          
+    <node name="amcl" pkg="amcl" type="amcl" respawn="true">
+        <param name="base_frame_id" value="laser"/>
+    </node>
+  </group>
+  
+</launch>

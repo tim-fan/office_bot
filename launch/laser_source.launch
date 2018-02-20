@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+
+<!-- Launch file to proivde laser data either from a given log or from the live sensor -->
+
+<launch>
+    <arg name="input_log_file" default="" doc="If specified, the given log is used to provide sensor data. Otherwise a live connection to the sensor will be made"/>
+
+    <include file="$(find office_bot)/launch/remote_laser.launch" 
+        if="$(eval input_log_file == '')"/>
+    
+    <node name="log_playback" pkg="rosbag" type="play"
+        args="$(arg input_log_file) --clock --keep-alive"
+        required="true"
+        if="$(eval input_log_file != '')"/>
+
+    <param name="use_sim_time" value="true" if="$(eval input_log_file != '')"/>
+    <param name="use_sim_time" value="false" if="$(eval input_log_file == '')"/>
+</launch>
