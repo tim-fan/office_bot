@@ -7,7 +7,7 @@ project(thjc_bot_base)
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
-find_package(catkin REQUIRED)
+find_package(catkin REQUIRED COMPONENTS roscpp)
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
@@ -112,14 +112,14 @@ catkin_package(
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
 include_directories(
-# include
-# ${catkin_INCLUDE_DIRS}
+ include
+ ${catkin_INCLUDE_DIRS}
 )
 
 ## Declare a C++ library
-# add_library(${PROJECT_NAME}
-#   src/${PROJECT_NAME}/thjc_bot_base.cpp
-# )
+#add_library(${PROJECT_NAME}
+#  src/MotorControl.cpp
+#)
 
 ## Add cmake target dependencies of the library
 ## as an example, code may need to be generated before libraries
@@ -193,3 +193,7 @@ include_directories(
 
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
+
+add_executable(thjc_bot_controller src/thjc_bot_controller.cpp src/MotorControl.cpp)
+target_link_libraries(thjc_bot_controller ${catkin_LIBRARIES})
+#add_dependencies(thjc_bot_controller beginner_tutorials_generate_messages_cpp)
