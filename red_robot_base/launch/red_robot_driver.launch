@@ -2,11 +2,26 @@
 
 <launch>
   <arg name="model" default="$(find xacro)/xacro.py '$(find red_robot_base)/urdf/red_robot.xacro'"/>
-
+  
+  <!-- Load joint controller configurations from YAML file to parameter server -->
+  <rosparam file="$(find red_robot_base)/cfg/red_robot_control.yaml" command="load"/>
+  
+  <!--load urdf -->
   <param name="robot_description" command="$(arg model)" />
+  
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"
+    respawn="false" output="screen"/>
+  
+  <!-- controller manager -->
+  <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
+    output="screen" args="red_robot joint_state_controller"/>
 
+  <!-- joint controller -->
   <node name="red_robot_driver_node" pkg="red_robot_base" output="screen" type="red_robot_base_node"/>
   
-  <include file="$(find red_robot_base)/launch/red_robot_control.launch" />
+  <!-- serial interface to motors -->
+  <node name="red_robot_serial_interface" pkg="rosserial_python" output="screen" type="serial_node.py"/>
+  
+  
   
 </launch>

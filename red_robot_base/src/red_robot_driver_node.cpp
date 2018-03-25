@@ -1,25 +1,17 @@
 
 
 #include <ros/ros.h>
-#include <std_msgs/Float64.h>
+#include <std_msgs/Float32.h>
 #include <controller_manager/controller_manager.h>
 #include <hardware_interface/joint_command_interface.h>
 #include <hardware_interface/joint_state_interface.h>
 #include <hardware_interface/robot_hw.h>
 
-//~ extern "C"{
-//~ #include <unistd.h>
-//~ #include <math.h>
-//~ #include <ypspur.h>
-//~ }
 
 class RedRobot : public hardware_interface::RobotHW
 {
 public:
-  RedRobot(){
-    //check for connection success (check serial connection is up?)
-    //set initial velocity zero?
-    
+  RedRobot(ros::NodeHandle nh){
 
     pos_[0] = 0.0; pos_[1] = 0.0;
     vel_[0] = 0.0; vel_[1] = 0.0;
@@ -41,17 +33,29 @@ public:
     jnt_vel_interface_.registerHandle(vel_handle_right);
 
     registerInterface(&jnt_vel_interface_);
+
+    //create publisher to send motor commands to motors
+    left_motor_pub = nh.advertise<std_msgs::Float32>("left_motor_speed", 100);
+    right_motor_pub = nh.advertise<std_msgs::Float32>("right_motor_speed", 100);
   }
 
   ros::Time getTime() const {return ros::Time::now();}
   ros::Duration getPeriod() const {return ros::Duration(0.1);}
 
-  void read(){
-    ROS_INFO_STREAM("Commands for joints: " << cmd_[0] << ", " << -cmd_[1]);
-    //int ret = YP_wheel_vel(cmd_[1], -cmd_[0]);
-    
-    //send commands to robot over serial
+  std_msgs::Float32 publishVel(float vel, ros::Publisher pub){
+    std_msgs::Float32 msg;
+    msg.data = vel;
+    pub.publish(msg);
   }
+
+  void read(){
+    ROS_INFO_STREAM("Commands for joints: " << cmd_[0] << ", " << cmd_[1]);
+    
+    //send commands to robot through motor topics
+    publishVel(cmd_[0], right_motor_pub);
+    publishVel(cmd_[1] * 0.5, left_motor_pub); 
+  }
+  
 
   void write(){
     double cur_vel[2];
@@ -70,12 +74,15 @@ public:
   }
 
 private:
+  ros::Publisher left_motor_pub;
+  ros::Publisher right_motor_pub;
   hardware_interface::JointStateInterface    jnt_state_interface_;
   hardware_interface::VelocityJointInterface jnt_vel_interface_;
   double cmd_[2];
   double pos_[2];
   double vel_[2];
   double eff_[2];
+  float scaleFactorVelToMotorSpeed;
 };
 
 int main(int argc, char **argv)
@@ -85,7 +92,7 @@ int main(int argc, char **argv)
   ros::init(argc, argv, "red_robot");
   ros::NodeHandle nh;
     
-  RedRobot robot;
+  RedRobot robot(nh);
   ROS_INFO_STREAM("period: " << robot.getPeriod().toSec());
   controller_manager::ControllerManager cm(&robot, nh);
 

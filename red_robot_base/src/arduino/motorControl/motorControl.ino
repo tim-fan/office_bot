@@ -6,7 +6,7 @@
 ros::NodeHandle  nh;
 
 int leftMotorEnablePin = 11;
-int leftMotorCtrlPin1 = 5;
+int leftMotorCtrlPin1 = A5;
 int leftMotorCtrlPin2 = 12; 
 int rightMotorEnablePin = 10;
 int rightMotorCtrlPin1 = 6;
@@ -15,20 +15,25 @@ int rightMotorCtrlPin2 = 3;
 void setMotorSpeed(float motorSpeed, int ctrlPin1, int ctrlPin2, int enablePin){
   
     digitalWrite(13, HIGH-digitalRead(13));   // blink the led
-    motorSpeed = constrain(motorSpeed, -100,100);
 
+    //map from desired speed to pwm value
+    //from rough test, motor spins at 16 rad/sec
+    //when pwm is fully on (255)
+    int pwmVal = map(abs(motorSpeed), 0, 16, 0, 255);
+    pwmVal = constrain(pwmVal, 0, 255);
+
+    //ctrl pins set motor direction
     bool ctrl1 = true;
     bool ctrl2 = false;
     if (motorSpeed < 0) {
         ctrl1 = !ctrl1;
         ctrl2 = !ctrl2;
     }
-    int pwmVal = map(abs(motorSpeed), 0, 100, 0, 255);
-    pwmVal = constrain(pwmVal, 0, 255);
 
     digitalWrite(ctrlPin1, ctrl1);
     digitalWrite(ctrlPin2, ctrl2);
     analogWrite(enablePin, pwmVal);
+    //digitalWrite(enablePin, pwmVal > 100);
 }
 
 void setLeftMotorSpeed( const std_msgs::Float32& motorSpeed){
