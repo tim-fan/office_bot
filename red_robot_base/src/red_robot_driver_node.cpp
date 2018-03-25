@@ -44,7 +44,7 @@ public:
   }
 
   ros::Time getTime() const {return ros::Time::now();}
-  ros::Duration getPeriod() const {return ros::Duration(0.01);}
+  ros::Duration getPeriod() const {return ros::Duration(0.1);}
 
   void read(){
     ROS_INFO_STREAM("Commands for joints: " << cmd_[0] << ", " << -cmd_[1]);

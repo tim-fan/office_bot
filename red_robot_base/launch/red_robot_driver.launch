@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+
+<launch>
+  <arg name="model" default="$(find xacro)/xacro.py '$(find red_robot_base)/urdf/red_robot.xacro'"/>
+
+  <param name="robot_description" command="$(arg model)" />
+
+  <node name="red_robot_driver_node" pkg="red_robot_base" output="screen" type="red_robot_base_node"/>
+  
+  <include file="$(find red_robot_base)/launch/red_robot_control.launch" />
+  
+</launch>

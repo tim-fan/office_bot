@@ -1,12 +1,12 @@
 joint_state_controller:
     type: joint_state_controller/JointStateController
-    publish_rate: 100
+    publish_rate: 10
 
 red_robot:
     type        : "diff_drive_controller/DiffDriveController"
     left_wheel  : 'left_wheel_joint'
     right_wheel : 'right_wheel_joint'
-    publish_rate: 100
+    publish_rate: 10
     
     enable_odom_tf: false
     
