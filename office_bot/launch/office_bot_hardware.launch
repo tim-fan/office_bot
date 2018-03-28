@@ -9,5 +9,5 @@
     <include file="$(find red_robot_base)/launch/red_robot_driver.launch"/>
   
     <node name="camera" pkg="cv_camera" type="cv_camera_node" />
-
+    <node name="laser" pkg="urg_node" type="urg_node" />
 </launch>

@@ -10,14 +10,14 @@
   <param name="robot_description" command="$(arg model)" />
   
   <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"
-    respawn="false" output="screen"/>
+    respawn="false"/>
   
   <!-- controller manager -->
   <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
     output="screen" args="red_robot joint_state_controller"/>
 
   <!-- joint controller -->
-  <node name="red_robot_driver_node" pkg="red_robot_base" output="screen" type="red_robot_base_node"/>
+  <node name="red_robot_driver_node" pkg="red_robot_base" type="red_robot_base_node"/>
   
   <!-- serial interface to motors -->
   <node name="red_robot_serial_interface" pkg="rosserial_python" output="screen" type="serial_node.py"/>
