@@ -4,6 +4,7 @@
 
 <launch>
   <arg name="joy_device" default="/dev/input/js0"/>
+  <arg name="cmd_topic" default="cmd_vel" doc="Topic to publish velocity commands to"/>
   
   <node name="joy" pkg="joy" type="joy_node">
     <param name="dev" value="$(arg joy_device)"/> 
@@ -12,7 +13,7 @@
   
   <node name="joy_to_twist" pkg="teleop_twist_joy" type="teleop_node">
     <param name="scale_angular" value="7"/> 
-    <remap from="cmd_vel" to="red_robot/cmd_vel"/> 
+    <remap from="cmd_vel" to="$(arg cmd_topic)"/> 
   </node> 
   
   <!--include file="$(find red_robot_base)/launch/red_robot_driver.launch"/-->
