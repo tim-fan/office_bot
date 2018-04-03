@@ -1,13 +1,13 @@
 <?xml version="1.0"?>
 
 <launch>
-  <arg name="model" default="$(find xacro)/xacro.py '$(find red_robot_base)/urdf/red_robot.xacro'"/>
+  <arg name="model" default="$(find red_robot_base)/urdf/red_robot.xacro"/>
   
   <!-- Load joint controller configurations from YAML file to parameter server -->
   <rosparam file="$(find red_robot_base)/cfg/red_robot_control.yaml" command="load"/>
   
   <!--load urdf -->
-  <param name="robot_description" command="$(arg model)" />
+  <param name="robot_description" command="$(find xacro)/xacro.py '$(arg model)'" />
   
   <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"
     respawn="false"/>
