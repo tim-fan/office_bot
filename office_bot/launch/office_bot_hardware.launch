@@ -8,7 +8,9 @@
     
     <!-- motor driver -->
     <include file="$(find red_robot_base)/launch/red_robot_driver.launch" if="$(eval chassis=='red_robot')"/>
-    <include file="$(find kangaroo_x2_driver)/launch/diff_drive_control.launch" if="$(eval chassis=='kangaroo')"/>
+    <include file="$(find kangaroo_x2_driver)/launch/diff_drive_control.launch" if="$(eval chassis=='kangaroo')">
+        <arg name="model" value="$(find office_bot)/urdf/box_bot.xacro"/>
+    </include>
   
     <node name="camera" pkg="cv_camera" type="cv_camera_node"/>
     <node name="laser" pkg="urg_node" type="urg_node" />
