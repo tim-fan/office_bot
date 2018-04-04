@@ -31,7 +31,9 @@
     <node name="cartographer_node" pkg="cartographer_ros"
         type="cartographer_node" args="
             -configuration_directory $(find office_bot)/cfg
-            -configuration_basename office_bot_odom.lua"/>
+            -configuration_basename office_bot_odom.lua">
+            <remap from="tf" to="carto_tf"/>
+    </node>
       
     <node name="rviz" pkg="rviz" type="rviz" required="true"
         args="-d $(find office_bot)/cfg/amcl_view.rviz" />

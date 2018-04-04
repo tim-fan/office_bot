@@ -5,12 +5,12 @@
 
 ros::NodeHandle  nh;
 
-int leftMotorEnablePin = 11;
-int leftMotorCtrlPin1 = A5;
-int leftMotorCtrlPin2 = 12; 
-int rightMotorEnablePin = 10;
-int rightMotorCtrlPin1 = 6;
-int rightMotorCtrlPin2 = 3;
+int leftMotorEnablePin = 10;
+int leftMotorCtrlPin1 = 6;
+int leftMotorCtrlPin2 = 3; 
+int rightMotorEnablePin = 11;
+int rightMotorCtrlPin1 = A5;
+int rightMotorCtrlPin2 = 12;
 
 void setMotorSpeed(float motorSpeed, int ctrlPin1, int ctrlPin2, int enablePin){
   
