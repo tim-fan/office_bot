@@ -12,10 +12,8 @@
   </node>  
   
   <node name="joy_to_twist" pkg="teleop_twist_joy" type="teleop_node">
-    <param name="scale_angular" value="7"/> 
+    <param name="scale_angular" value="2"/> 
     <remap from="cmd_vel" to="$(arg cmd_topic)"/> 
   </node> 
-  
-  <!--include file="$(find red_robot_base)/launch/red_robot_driver.launch"/-->
   
 </launch>
