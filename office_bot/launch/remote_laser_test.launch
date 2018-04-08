@@ -1,8 +1,0 @@
-<?xml version="1.0"?>
-<!-- launch the remote laser driver along with Rviz -->
-
-<launch>
-  <include file="$(find office_bot)/launch/remote_laser.launch" />
-  <node name="rviz" pkg="rviz" type="rviz" required="true"
-      args="-d $(find office_bot)/cfg/laser_test.rviz" />
-</launch>

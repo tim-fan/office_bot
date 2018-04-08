@@ -4,10 +4,6 @@
  -->
 
 <launch>
-  <arg name="input_log_file" default="" doc="If specified, the given log is used to provide sensor data. Otherwise a live connection to the sensor will be made"/>
-  <include file="$(find office_bot)/launch/laser_source.launch">
-      <arg name="input_log_file" value="$(arg input_log_file)"/>
-  </include>
   
   <node name="rviz" pkg="rviz" type="rviz" required="true"
       args="-d $(find office_bot)/cfg/cartographer_view.rviz" />
