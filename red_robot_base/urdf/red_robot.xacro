@@ -8,17 +8,14 @@
 
   <!-- Base Link -->
   <link name="base_link">
-    <visual>
+    <visual name="top_plate">
       <origin xyz="-0.02 0 0.05" rpy="0 0 0"/>
       <geometry>
 	    <box size=".16 .11 .01"/>
       </geometry>
       <material name="red"/>
     </visual>
-  </link>
-
-  <link name="caster">
-    <visual name="visual">
+    <visual name="caster">
       <origin xyz="-0.09 0.0 0.01" rpy="0 0 0"/>
       <geometry>
         <sphere  radius="0.01"/>
@@ -26,11 +23,6 @@
       <material name="grey"/>
     </visual>
   </link>
-
-  <joint type="fixed" name="caster_joint">
-    <child link="caster">caster</child>
-    <parent link="base_link">base_link</parent>
-  </joint>
 
   <link name="left_wheel">
     <collision name="collision">
@@ -78,6 +70,23 @@
     <parent link="base_link">base_link</parent>
     <axis xyz="0 1 0"/>
     <limit effort="100" velocity="100.0"  lower="-5000" upper="5000" />
+  </joint>
+
+
+  <link name="laser">
+    <visual>
+      <origin xyz="0 0.0 0" rpy="0 0 0"/>
+      <geometry>
+        <cylinder length="0.05" radius="0.03"/>
+      </geometry>
+      <material name="black"/>
+    </visual>
+  </link>
+
+  <joint type="fixed" name="laser_to_base_joint">
+    <origin rpy="0 0 0" xyz="0 0 0.05"/>
+    <child link="laser"/>
+    <parent link="base_link"/>
   </joint>
 
 </robot>

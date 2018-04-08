@@ -4,7 +4,8 @@
  -->
 
 <launch>
-    <arg name="chassis" default="kangaroo" doc="which robot chassis to use"/>
+    <arg name="chassis" default="red_robot" doc="which robot chassis to use"/>
+    <!--arg name="chassis" default="kangaroo" doc="which robot chassis to use"/-->
     
     <!-- motor driver -->
     <include file="$(find red_robot_base)/launch/red_robot_driver.launch" if="$(eval chassis=='red_robot')"/>

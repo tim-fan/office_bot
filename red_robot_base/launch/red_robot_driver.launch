@@ -22,6 +22,4 @@
   <!-- serial interface to motors -->
   <node name="red_robot_serial_interface" pkg="rosserial_python" output="screen" type="serial_node.py"/>
   
-  
-  
 </launch>

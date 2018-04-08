@@ -53,7 +53,7 @@ public:
     
     //send commands to robot through motor topics
     publishVel(cmd_[0], right_motor_pub);
-    publishVel(cmd_[1] * 0.5, left_motor_pub); 
+    publishVel(cmd_[1], left_motor_pub); 
   }
   
 
