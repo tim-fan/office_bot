@@ -1,5 +1,5 @@
 
-
+#include <math.h>       /* fabs */
 #include <ros/ros.h>
 #include <std_msgs/Float32.h>
 #include <controller_manager/controller_manager.h>
@@ -44,7 +44,14 @@ public:
 
   std_msgs::Float32 publishVel(float vel, ros::Publisher pub){
     std_msgs::Float32 msg;
-    msg.data = vel;
+    //deadzone scaling:
+    float maxSpeed = 16;
+    float deadZoneCutoff = 10;
+    float correctedSpeed = deadZoneCutoff + fabs(vel) * (maxSpeed - deadZoneCutoff) / maxSpeed;
+    float direction = (vel >= 0) ? 1 : -1;
+    float correctedVel = direction * correctedSpeed;
+
+    msg.data = correctedVel;
     pub.publish(msg);
   }
 
