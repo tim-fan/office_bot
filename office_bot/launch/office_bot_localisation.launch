@@ -5,9 +5,8 @@
  -->
 
 <launch>
-  <arg name="input_log_file" default="" doc="If specified, the given log is used to provide sensor data. Otherwise a live connection to the sensor will be made"/>
   <arg name="algorithm" default="amcl" doc="Name of localisation algorithm to run (amcl or cartographer)"/>
-      
+  <arg name="description_file" default="" doc="If provided, will publish the given urdf.xacro"/>
   
   <group if="$(eval algorithm == 'cartographer')">
       <node name="rviz" pkg="rviz" type="rviz" required="true"
@@ -40,6 +39,10 @@
     <node name="amcl" pkg="amcl" type="amcl" respawn="true">
         <param name="base_frame_id" value="laser"/>
     </node>
+
   </group>
+  
+  <param if="$(eval description_file != '')" name="robot_description" command="$(find xacro)/xacro --inorder '$(arg description_file)'" />
+
   
 </launch>
