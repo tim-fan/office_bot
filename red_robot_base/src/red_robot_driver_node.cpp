@@ -48,7 +48,7 @@ public:
     float maxSpeed = 16;
     float deadZoneCutoff = 10;
     float correctedSpeed = deadZoneCutoff + fabs(vel) * (maxSpeed - deadZoneCutoff) / maxSpeed;
-    float direction = (vel >= 0) ? 1 : -1;
+    float direction = (vel == 0) ? 0 : ((vel > 0) ? 1 : -1);
     float correctedVel = direction * correctedSpeed;
 
     msg.data = correctedVel;
