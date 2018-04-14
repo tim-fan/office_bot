@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<launch>
+    <node pkg="rtimulib_ros" type="rtimulib_ros" name="rtimulib_node" output="screen">
+        <param name="calibration_file_path" value="$(find office_bot)/cfg"/>
+        <param name="calibration_file_name" value="imu" />
+        <param name="frame_id" value="imu"/>
+	<remap from="rtimulib_node/imu" to="imu"/>
+    </node>
+</launch>
