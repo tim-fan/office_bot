@@ -23,26 +23,27 @@
   
   <group if="$(eval algorithm == 'amcl')">    
     <!-- running cartographer just as a laser-odometry source -->
-    <node name="cartographer_node" pkg="cartographer_ros"
+    <!--node name="cartographer_node" pkg="cartographer_ros"
         type="cartographer_node" args="
             -configuration_directory $(find office_bot)/cfg
             -configuration_basename office_bot_odom.lua">
             <remap from="tf" to="carto_tf"/>
-    </node>
+    </node-->
       
     <node name="rviz" pkg="rviz" type="rviz" required="true"
         args="-d $(find office_bot)/cfg/amcl_view.rviz" />
         
     <node name="map_server" pkg="map_server" type="map_server"
-        args="$(find office_bot)/cfg/officeMap.yaml"/>  
+        args="$(find office_bot)/cfg/beach_rd.yaml"/>  
           
     <node name="amcl" pkg="amcl" type="amcl" respawn="true">
-        <param name="base_frame_id" value="laser"/>
+        <param name="base_frame_id" value="base_link"/>
     </node>
 
   </group>
   
   <param if="$(eval description_file != '')" name="robot_description" command="$(find xacro)/xacro --inorder '$(arg description_file)'" />
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>
 
   
 </launch>
