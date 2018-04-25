@@ -16,5 +16,7 @@
 
     <include file="$(find office_bot)/launch/imu.launch"/>
     <node name="camera" pkg="cv_camera" type="cv_camera_node"/>
-    <node name="laser" pkg="urg_node" type="urg_node" />
+    <node name="laser" pkg="urg_node" type="urg_node">
+        <param name="calibrate_time" value="true"/>
+    </node>
 </launch>
