@@ -17,7 +17,10 @@
     output="screen" args="red_robot joint_state_controller"/>
 
   <!-- joint controller -->
-  <node name="red_robot_driver_node" pkg="red_robot_base" type="red_robot_base_node"/>
+  <node name="red_robot_driver_node" pkg="red_robot_base" type="red_robot_base_node">
+    <remap from="red_robot/cmd_vel" to="cmd_vel"/>
+    <remap from="red_robot/odom" to="odom"/>
+  </node>
   
   <!-- serial interface to motors -->
   <node name="red_robot_serial_interface" pkg="rosserial_python" output="screen" type="serial_node.py"/>
