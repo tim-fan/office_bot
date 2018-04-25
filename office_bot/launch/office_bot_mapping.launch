@@ -14,7 +14,7 @@
   <node name="cartographer_node" pkg="cartographer_ros"
       type="cartographer_node" args="
           -configuration_directory $(find office_bot)/cfg
-          -configuration_basename office_bot.lua"
+          -configuration_basename office_bot_red.lua"
       output="screen">
   </node>
 </launch>
