@@ -4,6 +4,8 @@
   <arg name="move_base_include" default="$(find office_bot_navigation)/launch/include/move_base.launch.xml" />
   <arg name="cmd_vel_topic" default="cmd_vel"/>
 
+  <node name="map_server" pkg="map_server" type="map_server" args="$(find office_bot_navigation)/config/maps/nav_area.yaml"/>
+
   <!-- move the robot -->
   <include file="$(arg move_base_include)">
     <arg name="cmd_vel_topic" value="$(arg cmd_vel_topic)"/>

@@ -7,7 +7,7 @@
 
     <node name="min_vel_booster" pkg="office_bot" type="set_minimum_vel.py" required="true">
         <param name="vel_x" value="0.1"/>
-        <param name="ang_vel_z" value="0.1"/>
+        <param name="ang_vel_z" value="0.8"/>
         <remap from="cmd_vel" to="yocs_cmd_vel_mux/output/cmd_vel"/>
     </node>
     

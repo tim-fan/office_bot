@@ -7,7 +7,7 @@ inflation_radius: 3.0
 inflater:
   #footprint: [[0.15, 0.15], [0.15, -0.15], [-0.4,-0.15], [-0.4, 0.15]]
   inflation_radius: 2.80
-  cost_scaling_factor: 2
+  cost_scaling_factor: 30
 
 obstacles:
   observation_sources: base_scan
