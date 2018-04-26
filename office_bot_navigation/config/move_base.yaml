@@ -3,7 +3,7 @@ base_global_planner: "navfn/NavfnROS"
 base_local_planner: "base_local_planner/TrajectoryPlannerROS"
 
 # Recovery behaviors
-recovery_behavior_enabled: true
+recovery_behavior_enabled: false
 recovery_behaviors:
   - name: "conservative_reset"
     type: "clear_costmap_recovery/ClearCostmapRecovery"
@@ -20,7 +20,7 @@ aggressive_reset:
   reset_distance: 0.5
 
 # Oscillation
-oscillation_timeout: 10.0
+oscillation_timeout: 1000.0
 oscillation_distance: 0.5
 
 # Global planner
@@ -64,8 +64,8 @@ TrajectoryPlannerROS:
   vtheta_samples: 10
   # scoring (defaults)
   meter_scoring: true
-  pdist_scale: 8.0
-  gdist_scale: 12.0
+  pdist_scale: 12.0
+  gdist_scale: 8.0
   occdist_scale: 0.1
   heading_lookahead: 0.325
   heading_scoring_timestep: 0.8

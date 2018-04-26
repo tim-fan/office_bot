@@ -44,9 +44,10 @@ class TfConverter:
         Update frame ids, height and timestamp, and republish
         """
 
-	if tfMsg.child_frame_id == "start_of_service":
+	if tfMsg.child_frame_id == "start_of_service": #adf -> sos
+        #todo: how to handle non-yaw rotations in this transform? Set to zero?
 		tfMsg.transform.translation.z = 0
-	elif tfMsg.child_frame_id == "device":
+	elif tfMsg.child_frame_id == "device": #sos -> device
 		tfMsg.transform.translation.z = self.deviceHeight
 
         tfMsg.header.frame_id = TfConverter.frameIdConversions[tfMsg.header.frame_id]
