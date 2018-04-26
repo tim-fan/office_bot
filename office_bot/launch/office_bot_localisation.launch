@@ -29,6 +29,8 @@
             -configuration_basename office_bot_odom.lua">
             <remap from="tf" to="carto_tf"/>
     </node>
+
+    <node name="odom_filter" pkg="office_bot" type="odom_tf_passthrough.py" args="carto_tf tf"/>
       
     <node name="rviz" pkg="rviz" type="rviz" required="true"
         args="-d $(find office_bot)/cfg/amcl_view.rviz" />
