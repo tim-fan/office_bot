@@ -41,7 +41,8 @@
   <!--   <test_depend>gtest</test_depend> -->
   <buildtool_depend>catkin</buildtool_depend>
   <run_depend>navigation</run_depend>
-
+  <run_depend>joy</run_depend> 
+  <run_depend>teleop_twist_joy</run_depend> 
 
   <!-- The export tag contains other, unspecified, tags -->
   <export>
