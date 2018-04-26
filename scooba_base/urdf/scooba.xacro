@@ -4,7 +4,7 @@
   <xacro:property name="PI" value="3.1415926535897931"/>
 
   <!-- Import Rviz colors -->
-  <xacro:include filename="$(find scooba_base)/urdf/materials.xacro" />
+  <xacro:include filename="$(find office_bot)/urdf/materials.xacro" />
 
   <!-- Base Link -->
   <link name="base_link">
@@ -15,6 +15,7 @@
       </geometry>
       <material name="blue"/>
     </visual>
+
     <visual name="caster">
       <origin xyz="0.16 0.0 0.01" rpy="0 0 0"/>
       <geometry>
@@ -22,6 +23,7 @@
       </geometry>
       <material name="grey"/>
     </visual>
+
     <visual name="left_eye">
       <origin xyz="0.15 -0.02 0.08" rpy="0 0 0"/>
       <geometry>
@@ -29,6 +31,7 @@
       </geometry>
       <material name="grey"/>
     </visual>
+
     <visual name="right_eye">
       <origin xyz="0.15 0.02 0.08" rpy="0 0 0"/>
       <geometry>
@@ -36,9 +39,10 @@
       </geometry>
       <material name="grey"/>
     </visual>
+    
   </link>
 
-  <link name="left_wheel">
+  <link name="left_wheel_link">
     <collision name="collision">
       <origin xyz="0 0.0 0" rpy="0 1.5707 1.5707"/>
       <geometry>
@@ -53,16 +57,16 @@
       <material name="black"/>
     </visual>
   </link>
-  
+
   <joint type="revolute" name="left_wheel_joint">
     <origin xyz="0 0.16 0.02" rpy="0 0 0"/>
-    <child link="left_wheel">left_wheel</child>
+    <child link="left_wheel_link">left_wheel</child>
     <parent link="base_link">base_link</parent>
     <axis xyz="0 1 0"/>
     <limit effort="100" velocity="100.0"  lower="-5000" upper="5000" />
   </joint> 
 
-  <link name="right_wheel">
+  <link name="right_wheel_link">
     <collision name="collision">
       <origin xyz="0 0.0 0" rpy="0 1.5707 1.5707"/>
       <geometry>
@@ -80,14 +84,13 @@
   
   <joint type="revolute" name="right_wheel_joint">
     <origin xyz="0 -0.16 0.02" rpy="0 0 0"/>
-    <child link="right_wheel">right_wheel</child>
+    <child link="right_wheel_link">right_wheel</child>
     <parent link="base_link">base_link</parent>
     <axis xyz="0 1 0"/>
     <limit effort="100" velocity="100.0"  lower="-5000" upper="5000" />
   </joint>
 
-
-  <link name="laser">
+  <link name="laser_link">
     <visual>
       <origin xyz="0 0.0 0" rpy="0 0 0"/>
       <geometry>
@@ -96,27 +99,27 @@
       <material name="black"/>
     </visual>
   </link>
-
-  <joint type="fixed" name="laser_to_base_joint">
-    <origin rpy="0 0 0" xyz="-0.05 0 0.05"/>
-    <child link="laser"/>
+  
+  <joint type="fixed" name="base_to_laser_link_joint">
+    <origin rpy="0 0 0" xyz="0.1 0 0.1"/>
+    <child link="laser_link"/>
     <parent link="base_link"/>
   </joint>
 
-  <link name="imu">
+  <link name="tango">
     <visual>
       <origin xyz="0 0.0 0" rpy="0 0 0"/>
       <geometry>
-        <cylinder length="0.01" radius="0.01"/>
+         <box size="0.2 0.12 0.01"/>
       </geometry>
       <material name="black"/>
     </visual>
   </link>
-  
-  <joint type="fixed" name="imu_to_base_joint">
-    <origin rpy="0 0 -1.5708" xyz="0 0 0.06"/>
-    <child link="imu"/>
-    <parent link="base_link"/>
+
+  <joint type="fixed" name="tango_to_base_joint">
+    <origin rpy="0 1.571 1.571" xyz="0 -0.2 0.05"/>
+    <child link="base_link"/>
+    <parent link="tango"/>
   </joint>
 
 </robot>
