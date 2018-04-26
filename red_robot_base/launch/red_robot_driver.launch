@@ -2,9 +2,7 @@
 
 <launch>
   <arg name="model" default="$(find red_robot_base)/urdf/red_robot.xacro"/>
-  
-  <!-- Load joint controller configurations from YAML file to parameter server -->
-  <rosparam file="$(find red_robot_base)/cfg/red_robot_control.yaml" command="load"/>
+  <arg name="input_log_file" default=""/>
   
   <!--load urdf -->
   <param name="robot_description" command="$(find xacro)/xacro.py '$(arg model)'" />
@@ -12,17 +10,34 @@
   <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"
     respawn="false"/>
   
-  <!-- controller manager -->
-  <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
-    output="screen" args="red_robot joint_state_controller"/>
+  <group if="$(eval input_log_file == '')">
+    <!-- Load joint controller configurations from YAML file to parameter server -->
+    <rosparam file="$(find red_robot_base)/cfg/red_robot_control.yaml" command="load"/>
+    
+    <!-- controller manager -->
+    <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
+      output="screen" args="red_robot joint_state_controller"/>
+  
+    <!-- joint controller -->
+    <node name="red_robot_driver_node" pkg="red_robot_base" type="red_robot_base_node">
+      <remap from="red_robot/cmd_vel" to="cmd_vel"/>
+      <remap from="red_robot/odom" to="odom"/>
+    </node>
+    
+    <!-- serial interface to motors -->
+    <node name="red_robot_serial_interface" pkg="rosserial_python" output="screen" type="serial_node.py"/>
 
-  <!-- joint controller -->
-  <node name="red_robot_driver_node" pkg="red_robot_base" type="red_robot_base_node">
-    <remap from="red_robot/cmd_vel" to="cmd_vel"/>
-    <remap from="red_robot/odom" to="odom"/>
-  </node>
-  
-  <!-- serial interface to motors -->
-  <node name="red_robot_serial_interface" pkg="rosserial_python" output="screen" type="serial_node.py"/>
-  
+    <param name="use_sim_time" value="false"/>
+  </group>
+
+  <group if="$(eval input_log_file != '')">
+
+    <node name="log_playback" pkg="rosbag" type="play" args="$(arg input_log_file) --clock"/>
+    <param name="use_sim_time" value="true"/>
+
+  </group>
+
+
+
+
 </launch>

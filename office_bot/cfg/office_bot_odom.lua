@@ -1,7 +1,7 @@
 -- Config for running office bot solely for producing laser-odometry
+-- Targeted to red-robot, as red-robot has no odometry
 -- Turns off global map optimisation
 
-include "office_bot.lua"
--- options.map_frame = "cartographer_map" --trying to figure out how to prevent cartographer publishing localisation (want only odom published)
+include "office_bot_red.lua"
 POSE_GRAPH.optimize_every_n_nodes = 0
 return options
