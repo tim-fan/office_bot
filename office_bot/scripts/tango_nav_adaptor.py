@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 #node for using tango_ros_streamer tf messages in ros navigation stack
-# does three things:
+# does four things:
 # 1. convert link names:
 #       area_description -> map
 #       start_of_service -> odom
@@ -11,7 +11,8 @@
 #         from tango_ros_streamer lag by 10s of seconds or more.
 #         As a basic hack/workaround, this node just re-stamps them with
 #         current ROS time
-# 3. generate odom messages from tf messages
+# 3. set tf poses to fixed height (assume 2d world)
+# 4. generate odom messages from tf messages
 #     
 
 import rospy
@@ -36,14 +37,16 @@ class TfConverter:
 
     def __init__(self):
         self.br = tf.TransformBroadcaster()
+	self.tfHeight = 0.2 #todo: make this a param
 
     def convert(self, tfMsg):
         """
-        Update frame ids and timestamp, and republish
+        Update frame ids, height and timestamp, and republish
         """
         tfMsg.header.frame_id = TfConverter.frameIdConversions[tfMsg.header.frame_id]
         tfMsg.child_frame_id = TfConverter.frameIdConversions[tfMsg.child_frame_id]
         tfMsg.header.stamp = rospy.Time.now()
+	tfMsg.transform.translation.z = self.tfHeight
         try:
             self.br.sendTransformMessage(tfMsg)
         except rospy.ROSException:

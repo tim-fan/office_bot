@@ -21,5 +21,6 @@
     </node>
 
     <include file="$(find office_bot)/launch/joystick_teleop.launch"/>
+    <param name="tango/publish_pose_on_tf" value="false"/>
     <node name="tango_nav_adaptor" pkg="office_bot" type="tango_nav_adaptor.py"/>
 </launch>
