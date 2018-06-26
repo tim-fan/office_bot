@@ -21,6 +21,7 @@ from geometry_msgs.msg import TransformStamped
 from nav_msgs.msg import Odometry
 from geometry_msgs.msg import Pose
 from tf.transformations import euler_from_quaternion
+from math import pi, sin, cos
 
 
 
@@ -67,6 +68,7 @@ class OdomPublisher:
         
         try:
             currentPos = self.tfBuffer.lookup_transform('odom', 'tango', rospy.Time(0))
+            
             #print(currentPos)
         except (tf2_ros.LookupException, tf2_ros.ConnectivityException) as e:
             currentPos = self.lastPos
@@ -74,19 +76,26 @@ class OdomPublisher:
         
         if (self.lastPos is not None):
             dt = (currentPos.header.stamp - self.lastPos.header.stamp).to_sec()
-            print(dt)
+            #print(dt)
+
             
             if dt <= 0:
                 #wait for an updated tf
                 pass
                 
             else:
-                #build and publish an odometry message based on observed motiona
-                deltaX = currentPos.transform.translation.x - self.lastPos.transform.translation.x
-                deltaY = currentPos.transform.translation.y - self.lastPos.transform.translation.y
-                deltaYaw = OdomPublisher.yawFromTransform(currentPos) - OdomPublisher.yawFromTransform(self.lastPos)
                 
-                #TODO: delta x and y should be in Tango frame! (currently in odom frame)
+                
+                #build and publish an odometry message based on observed motions
+                deltaXGlobal = currentPos.transform.translation.x - self.lastPos.transform.translation.x
+                deltaYGlobal = currentPos.transform.translation.y - self.lastPos.transform.translation.y
+                prevYaw = OdomPublisher.yawFromTransform(self.lastPos)
+                deltaX = deltaXGlobal *  cos(prevYaw)  + deltaYGlobal * sin(prevYaw)
+                deltaY = deltaXGlobal * -sin(prevYaw) + deltaYGlobal * cos(prevYaw)
+                deltaYaw = OdomPublisher.yawFromTransform(currentPos) - prevYaw
+                
+                wrapAngle = lambda x : ((x + pi) % (2*pi)) - pi #wrap to +/- pi
+                deltaYaw = wrapAngle(deltaYaw)
                 
                 odomMsg = Odometry()
                 odomMsg.header = currentPos.header
