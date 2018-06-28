@@ -4,8 +4,8 @@
  -->
 
 <launch>
-    <arg name="chassis" default="red_robot" doc="which robot chassis to use"/>
-    <!--arg name="chassis" default="kangaroo" doc="which robot chassis to use"/-->
+    <!--arg name="chassis" default="red_robot" doc="which robot chassis to use"/-->
+    <arg name="chassis" default="kangaroo" doc="which robot chassis to use"/>
     
     <!-- motor driver -->
     <include file="$(find red_robot_base)/launch/red_robot_driver.launch" if="$(eval chassis=='red_robot')"/>
@@ -19,4 +19,7 @@
     <node name="laser" pkg="urg_node" type="urg_node">
         <param name="calibrate_time" value="true"/>
     </node>
+
+    <include file="$(find office_bot)/launch/joystick_teleop.launch"/>
+    <node name="tango_nav_adaptor" pkg="office_bot" type="tango_nav_adaptor.py"/>
 </launch>

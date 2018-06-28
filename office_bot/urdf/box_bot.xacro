@@ -88,6 +88,16 @@
     </visual>
   </link>
 
+  <link name="tango">
+    <visual>
+      <origin xyz="0 0.0 0" rpy="0 0 0"/>
+      <geometry>
+         <box size="0.2 0.12 0.01"/>
+      </geometry>
+      <material name="black"/>
+    </visual>
+  </link>
+
   <joint type="revolute" name="motor_1_joint">
     <origin rpy="0 0 0" xyz="0.0 -0.13 0.045"/>
     <child link="right_wheel_link">right_wheel</child>
@@ -104,10 +114,16 @@
     <limit effort="100" velocity="100.0"  lower="-5000" upper="5000" />
   </joint> 
 
-  <joint type="fixed" name="laser_to_base_joint">
-    <origin rpy="0 0 0" xyz="0.12 0 0.095"/>
+  <joint type="fixed" name="base_to_laser_joint">
+    <origin rpy="0 1.571 1.571" xyz="0.12 0 0.095"/>
     <child link="laser"/>
     <parent link="base_link"/>
+  </joint>
+
+  <joint type="fixed" name="tango_to_base_joint">
+    <origin rpy="0 1.571 1.571" xyz="0 -0.195 0.12"/>
+    <child link="base_link"/>
+    <parent link="tango"/>
   </joint>
 
 </robot>
