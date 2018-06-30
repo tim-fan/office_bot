@@ -70,7 +70,7 @@ class OdomPublisher:
             self.tfListener = tf2_ros.TransformListener(self.tfBuffer)
         
         try:
-            currentPos = self.tfBuffer.lookup_transform('odom', 'tango', rospy.Time(0))
+            currentPos = self.tfBuffer.lookup_transform('odom', 'base_link', rospy.Time(0))
             
             #print(currentPos)
         except (tf2_ros.LookupException, tf2_ros.ConnectivityException) as e:
