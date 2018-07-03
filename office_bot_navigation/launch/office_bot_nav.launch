@@ -1,0 +1,9 @@
+<launch>
+
+  <!-- Navigation parameter files -->
+  <arg name="move_base_include" default="$(find office_bot_navigation)/launch/include/move_base.launch.xml" />
+
+  <!-- move the robot -->
+  <include file="$(arg move_base_include)" />
+
+</launch>
