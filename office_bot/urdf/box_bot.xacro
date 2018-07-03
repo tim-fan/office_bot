@@ -78,7 +78,7 @@
     </visual>
   </link>
 
-  <link name="laser">
+  <link name="laser_link">
     <visual>
       <origin xyz="0 0.0 0" rpy="0 0 0"/>
       <geometry>
@@ -114,9 +114,9 @@
     <limit effort="100" velocity="100.0"  lower="-5000" upper="5000" />
   </joint> 
 
-  <joint type="fixed" name="base_to_laser_joint">
+  <joint type="fixed" name="base_to_laser_link_joint">
     <origin rpy="0 0 0" xyz="0.12 0 0.095"/>
-    <child link="laser"/>
+    <child link="laser_link"/>
     <parent link="base_link"/>
   </joint>
 

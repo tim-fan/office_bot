@@ -18,6 +18,7 @@
     <node name="camera" pkg="cv_camera" type="cv_camera_node"/>
     <node name="laser" pkg="urg_node" type="urg_node">
         <param name="calibrate_time" value="true"/>
+        <param name="frame_id" value="laser_link"/>
     </node>
 
     <include file="$(find office_bot)/launch/joystick_teleop.launch"/>

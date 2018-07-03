@@ -37,16 +37,22 @@ class TfConverter:
 
     def __init__(self):
         self.br = tf.TransformBroadcaster()
-	self.tfHeight = 0.2 #todo: make this a param
+	self.deviceHeight = 0.2 #todo: make this a param
 
     def convert(self, tfMsg):
         """
         Update frame ids, height and timestamp, and republish
         """
+
+	if tfMsg.child_frame_id == "start_of_service":
+		tfMsg.transform.translation.z = 0
+	elif tfMsg.child_frame_id == "device":
+		tfMsg.transform.translation.z = self.deviceHeight
+
         tfMsg.header.frame_id = TfConverter.frameIdConversions[tfMsg.header.frame_id]
         tfMsg.child_frame_id = TfConverter.frameIdConversions[tfMsg.child_frame_id]
         tfMsg.header.stamp = rospy.Time.now()
-	tfMsg.transform.translation.z = self.tfHeight
+
         try:
             self.br.sendTransformMessage(tfMsg)
         except rospy.ROSException:
