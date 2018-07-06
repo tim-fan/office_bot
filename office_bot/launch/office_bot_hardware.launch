@@ -17,6 +17,7 @@
     <include file="$(find office_bot)/launch/imu.launch"/>
     <node name="camera" pkg="cv_camera" type="cv_camera_node"/>
     <node name="laser" pkg="urg_node" type="urg_node">
+        <remap from="scan" to="scan_unfiltered"/>
         <param name="calibrate_time" value="true"/>
         <param name="frame_id" value="laser_link"/>
     </node>
@@ -24,4 +25,10 @@
     <include file="$(find office_bot)/launch/joystick_teleop.launch"/>
     <param name="tango/publish_pose_on_tf" value="false"/>
     <node name="tango_nav_adaptor" pkg="office_bot" type="tango_nav_adaptor.py"/>
+
+    <node name="laser_filter" pkg="laser_filters" type="scan_to_scan_filter_chain">
+        <rosparam command="load" file="$(find office_bot)/cfg/laser_range_filter.yaml"/>
+        <remap from="scan" to="scan_unfiltered"/>
+        <remap from="scan_filtered" to="scan"/>
+    </node>
 </launch>
