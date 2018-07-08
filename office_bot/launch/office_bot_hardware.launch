@@ -11,6 +11,7 @@
     <include file="$(find red_robot_base)/launch/red_robot_driver.launch" if="$(eval chassis=='red_robot')"/>
     <include file="$(find kangaroo_x2_driver)/launch/diff_drive_control.launch" if="$(eval chassis=='kangaroo')">
         <arg name="model" value="$(find office_bot)/urdf/box_bot.xacro"/>
+        <arg name="cmd_vel_topic" value="yocs_cmd_vel_mux/output/cmd_vel"/>
     </include>
 
 
@@ -22,6 +23,8 @@
         <param name="frame_id" value="laser_link"/>
     </node>
 
-    <include file="$(find office_bot)/launch/joystick_teleop.launch"/>
+    <include file="$(find office_bot)/launch/joystick_teleop.launch">
+        <arg name="cmd_topic" value="yocs_cmd_vel_mux/input/joystick"/>
+    </include>
     <param name="tango/publish_pose_on_tf" value="false"/>
 </launch>

@@ -2,8 +2,11 @@
 
   <!-- Navigation parameter files -->
   <arg name="move_base_include" default="$(find office_bot_navigation)/launch/include/move_base.launch.xml" />
+  <arg name="cmd_vel_topic" default="cmd_vel"/>
 
   <!-- move the robot -->
-  <include file="$(arg move_base_include)" />
+  <include file="$(arg move_base_include)">
+    <arg name="cmd_vel_topic" value="$(arg cmd_vel_topic)"/>
+  </include>
 
 </launch>
