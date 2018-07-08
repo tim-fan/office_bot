@@ -4,6 +4,14 @@
     <include file="$(find office_bot_navigation)/launch/office_bot_nav.launch">
         <arg name="cmd_vel_topic" value="yocs_cmd_vel_mux/input/navigation"/>
     </include>
+
+    <node name="min_vel_booster" pkg="office_bot" type="set_minimum_vel.py" required="true">
+        <param name="vel_x" value="0.1"/>
+        <param name="ang_vel_z" value="0.1"/>
+        <remap from="cmd_vel" to="yocs_cmd_vel_mux/output/cmd_vel"/>
+    </node>
+    
+    <include file="$(find office_bot)/launch/cmd_vel_mux.launch"/>
     
     <node name="tango_nav_adaptor" pkg="office_bot" type="tango_nav_adaptor.py"/>
 
@@ -13,5 +21,4 @@
         <remap from="scan_filtered" to="scan"/>
     </node>
 
-    <include file="$(find office_bot)/launch/cmd_vel_mux.launch"/>
 </launch>

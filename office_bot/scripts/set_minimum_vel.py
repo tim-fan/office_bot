@@ -58,7 +58,6 @@ class MsgProcessor:
         
         
     def updateCfg(self, config, level):
-        print('test')
         rospy.loginfo("""Reconfigure Request: {vel_x}, {vel_y}, {vel_z}\ 
           {ang_vel_x}, {ang_vel_y}, {ang_vel_z}""".format(**config))
         self.config = config
