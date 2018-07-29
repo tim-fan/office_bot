@@ -1,5 +1,5 @@
 #Move_base Parametres
-controller_frequency: 5.0
+controller_frequency: 4.0
 planner_frequency: 1.0
 oscillation_distance: 0.2
 planner_patience: 3
@@ -88,3 +88,4 @@ TebLocalPlannerROS:
   weight_kinematics_turning_radius: 1000.0
   feasibility_check_no_poses: 2
   max_vel_x: 0.5
+  enable_homotopy_class_planning: false
