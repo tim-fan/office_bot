@@ -3,9 +3,11 @@
 #include "Arduino.h"
 #include "SpeedEncoder.h"
 
-SpeedEncoder::SpeedEncoder()
+SpeedEncoder::SpeedEncoder(int interruptPin)
 {
-  _tickCount = 0;
+  _interruptPin = interruptPin;
+  _tickCountSinceStart = 0;
+  _tickCountSinceUpdate = 0;
 }
 
 double SpeedEncoder::getSpeed()
@@ -13,22 +15,26 @@ double SpeedEncoder::getSpeed()
   return _speed;
 }
 
+unsigned long SpeedEncoder::getTicksSinceStart()
+{
+  return _tickCountSinceStart;
+}
+
 void SpeedEncoder::incrementCount()
 {
-  _tickCount++;
+  _tickCountSinceStart++;
+  _tickCountSinceUpdate++;
  
 }
 
 void SpeedEncoder::computeSpeed(int updatePeriod){
-  _speed = double(_tickCount) / updatePeriod * 1e6;
-  _tickCount = 0;
+  _speed = double(_tickCountSinceUpdate) / updatePeriod * 1e6;
+  _tickCountSinceUpdate = 0;
 }
 
 extern int speedCalcPeriod = 50 * 1e3; //50,000 micros (50 millis, 20Hz)
-extern int encoder1Pin = 2;
-extern int encoder2Pin = 3;
-SpeedEncoder encoder1 = SpeedEncoder();
-SpeedEncoder encoder2 = SpeedEncoder();
+extern SpeedEncoder encoder1;
+extern SpeedEncoder encoder2;
 
 void incrementEncoder1(void){
   noInterrupts();
@@ -46,11 +52,13 @@ void computeSpeed(void){
   noInterrupts();  
   encoder1.computeSpeed(speedCalcPeriod);
   encoder2.computeSpeed(speedCalcPeriod);
-  Serial.println(String(encoder1.getSpeed()) + "\t" + String(encoder2.getSpeed()));
+//  Serial.println(String(encoder1.getSpeed(),2) + "\t" + String(encoder2.getSpeed()));
   interrupts();
 }
 
-void attachEncoderInterrupts(void){
+void attachEncoderInterrupts(){
+  int encoder1Pin = encoder1._interruptPin;
+  int encoder2Pin = encoder2._interruptPin;
   pinMode(encoder1Pin, INPUT_PULLUP);
   pinMode(encoder2Pin, INPUT_PULLUP);
   attachInterrupt(digitalPinToInterrupt(encoder1Pin), incrementEncoder1, RISING);

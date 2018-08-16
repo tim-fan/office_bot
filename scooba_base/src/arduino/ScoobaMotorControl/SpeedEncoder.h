@@ -15,24 +15,26 @@
 class SpeedEncoder
 {
   public:
-    SpeedEncoder();
+    SpeedEncoder(int interruptPin);
     double getSpeed();
+    unsigned long getTicksSinceStart();
     void incrementCount();
-    void computeSpeed(int updatePeriod);
+    void computeSpeed(int updatePeriod);    
+    int _interruptPin;
+    
   private:
-    int _tickCount;
+    unsigned int _tickCountSinceUpdate; //used for speed calculation
+    unsigned long _tickCountSinceStart; //used for determining ticks per rad param (count ticks over a few revolutions)
     double _speed;
 };
 
 extern int speedCalcPeriod;
-extern int encoder1Pin;
-extern int encoder2Pin;
 
 extern SpeedEncoder encoder1;
 extern SpeedEncoder encoder2;
 
 void incrementEncoder1(void);
 void incrementEncoder2(void);
-void attachEncoderInterrupts(void);
+void attachEncoderInterrupts();
 
 #endif

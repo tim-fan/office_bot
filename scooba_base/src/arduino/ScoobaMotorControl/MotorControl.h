@@ -14,11 +14,13 @@ class MotorController
 {
   public:
     MotorController(int ctrlPin1, int ctrlPin2, int enablePin);
-    void setSpeed(int speed); //set speed (percentage, -100 tp 100)
+    void setPower(int power); //set power to motor (percentage, -100 to 100)
+    double getPower(void);
   private:
     int _ctrlPin1;
     int _ctrlPin2;
     int _enablePin;
+    int _currentPower;
 };
 
 #endif
