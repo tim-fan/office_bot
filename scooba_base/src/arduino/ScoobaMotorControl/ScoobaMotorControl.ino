@@ -16,40 +16,49 @@
 
 #include <TimerOne.h>
 #include <ros.h>
+
 #include <std_msgs/Float32.h>
+#include <std_msgs/Int32.h>
+
+
 #include "MotorControl.h"
 #include "SpeedEncoder.h"
 #include "SpeedController.h"
 
 //left wheel controller
-MotorController motor1(7,4,5); 
-extern SpeedEncoder encoder1 = SpeedEncoder(2);
-SpeedController m1Controller(encoder1, motor1);
+MotorController leftMotor(7,4,5); 
+extern SpeedEncoder leftEncoder = SpeedEncoder(2);
+SpeedController leftMotorController(leftEncoder, leftMotor);
 
 //right wheel controller
-MotorController motor2(8,9,6); 
-extern SpeedEncoder encoder2 = SpeedEncoder(3);
-SpeedController m2Controller(encoder2, motor2);
+MotorController rightMotor(8,9,6); 
+extern SpeedEncoder rightEncoder = SpeedEncoder(3);
+SpeedController rightMotorController(rightEncoder, rightMotor);
 
 ros::NodeHandle  nh;
 
-//ROS subsribers for setting wheel speeds
+//ROS subscribers for setting wheel speeds
 void setLeftMotorSpeed( const std_msgs::Float32& motorSpeed){
-  m1Controller.setSpeed(motorSpeed.data);
+  leftMotorController.setSpeed(motorSpeed.data);
 }
 ros::Subscriber<std_msgs::Float32> subLeft("left_motor_speed", setLeftMotorSpeed );
 
 void setRightMotorSpeed( const std_msgs::Float32& motorSpeed){
-  m2Controller.setSpeed(motorSpeed.data);
+  rightMotorController.setSpeed(motorSpeed.data);
 }
 ros::Subscriber<std_msgs::Float32> subRight("right_motor_speed", setRightMotorSpeed );
 
+std_msgs::Int32 leftWheelTicksMsg;
+ros::Publisher leftTicksPublisher("left_wheel_ticks", &leftWheelTicksMsg);
+std_msgs::Int32 rightWheelTicksMsg;
+ros::Publisher rightTicksPublisher("right_wheel_ticks", &rightWheelTicksMsg);
 
 //params for speed control.
 //Will be set as ROS params
 float pid_constants[3];
 float ticksPerRevolution;
-
+int publishPeriod = 50; //ms
+unsigned long nextPublishTime = millis();
 
 //led flashing
 bool ledState = false;
@@ -71,6 +80,8 @@ void setup() {
   nh.initNode();
   nh.subscribe(subLeft);
   nh.subscribe(subRight);
+  nh.advertise(leftTicksPublisher);
+  nh.advertise(rightTicksPublisher);
   while(!nh.connected()) {
     nh.spinOnce();
     flashLed(1000);
@@ -87,12 +98,12 @@ void setup() {
   }
 
   //pass params to controllers
-  m1Controller.setPidParams(pid_constants[0],pid_constants[1],pid_constants[2]);
-  m2Controller.setPidParams(pid_constants[0],pid_constants[1],pid_constants[2]);  
+  leftMotorController.setPidParams(pid_constants[0],pid_constants[1],pid_constants[2]);
+  rightMotorController.setPidParams(pid_constants[0],pid_constants[1],pid_constants[2]);  
   
   //for reference, ticks per rev for scooba motor = 402.7 calculated by averaging ticks over 10 revolutions
-  m1Controller.setTicksPerRevolution(ticksPerRevolution);
-  m2Controller.setTicksPerRevolution(ticksPerRevolution);
+  leftMotorController.setTicksPerRevolution(ticksPerRevolution);
+  rightMotorController.setTicksPerRevolution(ticksPerRevolution);
 
   //start encoders
   attachEncoderInterrupts();
@@ -101,7 +112,16 @@ void setup() {
 void loop() {
   flashLed(30); //for making sure loop is still looping
   
-  m1Controller.update();
-  m2Controller.update();
+  leftMotorController.update();
+  rightMotorController.update();
+
+  if (millis() > nextPublishTime){
+    nextPublishTime += publishPeriod;
+    leftWheelTicksMsg.data = leftEncoder.getTicksSinceStart();
+    leftTicksPublisher.publish(&leftWheelTicksMsg);
+    rightWheelTicksMsg.data = rightEncoder.getTicksSinceStart();
+    rightTicksPublisher.publish(&rightWheelTicksMsg);
+  }
+  
   nh.spinOnce();
 }

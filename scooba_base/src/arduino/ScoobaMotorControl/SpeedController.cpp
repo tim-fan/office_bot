@@ -7,15 +7,10 @@ SpeedController::SpeedController(SpeedEncoder& speedEncoder, MotorController& mo
   _currentSpeed(0),
   _motorPower(0),
   _setpointSpeed(0),
-  _pidController(&_currentSpeed, &_motorPower, &_setpointSpeed, _pidConstants[0],_pidConstants[1],_pidConstants[2], DIRECT),
-  _ticksToRadians(1)
+  _pidController(&_currentSpeed, &_motorPower, &_setpointSpeed, _pidConstants[0],_pidConstants[1],_pidConstants[2], DIRECT)
 {
   _pidController.SetMode(AUTOMATIC);
   _pidController.SetOutputLimits(-100, 100); //output is motor power, which varies between +/- 100
-}
-
-void SpeedController::setTicksPerRevolution(double ticksPerRevolution){
-  _ticksToRadians = 2 * PI / ticksPerRevolution;
 }
 
 void SpeedController::setPidParams(double Kp, double Ki, double Kd){
@@ -26,14 +21,7 @@ void SpeedController::setPidParams(double Kp, double Ki, double Kd){
 }
 
 double SpeedController::getSpeed(){
-  //encoder does not detect motor spin direction (forward or backward). 
-  //Simplest work around - assume direction is equal 
-  //to the direction of the current motor command.
-  //This may cause issues with the PID controller, especially
-  //if the setpoint direction is flipped suddenly. Will
-  //test and attempt cleaner workaround if necessary.
-  double motorDir = _motor.getPower() >= 0 ? 1 : -1;
-  return _encoder.getSpeed() * _ticksToRadians * motorDir;
+  return _encoder.getSpeed();
 }
 
 double SpeedController::getPower(){
@@ -48,6 +36,14 @@ void SpeedController::setSpeed(double speed){
 }
 
 void SpeedController::update(){
+  //encoder does not detect motor spin direction (forward or backward). 
+  //Simplest work around - assume direction is equal 
+  //to the direction of the current motor command.
+  //This may cause issues with the PID controller, especially
+  //if the setpoint direction is flipped suddenly. Will
+  //test and attempt cleaner workaround if necessary.
+  _encoder.setDirection(_motor.getPower() >= 0 ? 1 : -1);
+  
   _currentSpeed = getSpeed();
   _pidController.Compute();
   _motor.setPower(_motorPower);

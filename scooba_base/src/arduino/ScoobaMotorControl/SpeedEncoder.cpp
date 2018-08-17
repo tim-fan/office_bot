@@ -8,6 +8,7 @@ SpeedEncoder::SpeedEncoder(int interruptPin)
   _interruptPin = interruptPin;
   _tickCountSinceStart = 0;
   _tickCountSinceUpdate = 0;
+  _direction = 1;
 }
 
 double SpeedEncoder::getSpeed()
@@ -15,15 +16,15 @@ double SpeedEncoder::getSpeed()
   return _speed;
 }
 
-unsigned long SpeedEncoder::getTicksSinceStart()
+long SpeedEncoder::getTicksSinceStart()
 {
   return _tickCountSinceStart;
 }
 
 void SpeedEncoder::incrementCount()
 {
-  _tickCountSinceStart++;
-  _tickCountSinceUpdate++;
+  _tickCountSinceStart += _direction;
+  _tickCountSinceUpdate += _direction;
  
 }
 
@@ -32,37 +33,41 @@ void SpeedEncoder::computeSpeed(int updatePeriod){
   _tickCountSinceUpdate = 0;
 }
 
-extern int speedCalcPeriod = 50 * 1e3; //50,000 micros (50 millis, 20Hz)
-extern SpeedEncoder encoder1;
-extern SpeedEncoder encoder2;
+void SpeedEncoder::setDirection(int direction){
+  _direction = direction;  
+}
 
-void incrementEncoder1(void){
+extern int speedCalcPeriod = 50 * 1e3; //50,000 micros (50 millis, 20Hz)
+extern SpeedEncoder leftEncoder;
+extern SpeedEncoder rightEncoder;
+
+void incrementLeftEncoder(void){
   noInterrupts();
-  encoder1.incrementCount();
+  leftEncoder.incrementCount();
   interrupts();
 }
 
-void incrementEncoder2(void){
+void incrementRightEncoder(void){
   noInterrupts();
-  encoder2.incrementCount();
+  rightEncoder.incrementCount();
   interrupts();
 }
 
 void computeSpeed(void){
   noInterrupts();  
-  encoder1.computeSpeed(speedCalcPeriod);
-  encoder2.computeSpeed(speedCalcPeriod);
-//  Serial.println(String(encoder1.getSpeed(),2) + "\t" + String(encoder2.getSpeed()));
+  leftEncoder.computeSpeed(speedCalcPeriod);
+  rightEncoder.computeSpeed(speedCalcPeriod);
+//  Serial.println(String(leftEncoder.getSpeed(),2) + "\t" + String(rightEncoder.getSpeed()));
   interrupts();
 }
 
 void attachEncoderInterrupts(){
-  int encoder1Pin = encoder1._interruptPin;
-  int encoder2Pin = encoder2._interruptPin;
-  pinMode(encoder1Pin, INPUT_PULLUP);
-  pinMode(encoder2Pin, INPUT_PULLUP);
-  attachInterrupt(digitalPinToInterrupt(encoder1Pin), incrementEncoder1, RISING);
-  attachInterrupt(digitalPinToInterrupt(encoder2Pin), incrementEncoder2, RISING);
+  int leftEncoderPin = leftEncoder._interruptPin;
+  int rightEncoderPin = rightEncoder._interruptPin;
+  pinMode(leftEncoderPin, INPUT_PULLUP);
+  pinMode(rightEncoderPin, INPUT_PULLUP);
+  attachInterrupt(digitalPinToInterrupt(leftEncoderPin), incrementLeftEncoder, RISING);
+  attachInterrupt(digitalPinToInterrupt(rightEncoderPin), incrementRightEncoder, RISING);
   Timer1.initialize(speedCalcPeriod);
   Timer1.attachInterrupt(computeSpeed);
 }
