@@ -14,8 +14,8 @@ SpeedController::SpeedController(SpeedEncoder& speedEncoder, MotorController& mo
   _pidController.SetOutputLimits(-100, 100); //output is motor power, which varies between +/- 100
 }
 
-void SpeedController::setTicksToRadiansParam(double ticksToRadians){
-  _ticksToRadians = ticksToRadians;
+void SpeedController::setTicksPerRevolution(double ticksPerRevolution){
+  _ticksToRadians = 2 * PI / ticksPerRevolution;
 }
 
 void SpeedController::setPidParams(double Kp, double Ki, double Kd){
