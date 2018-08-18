@@ -16,7 +16,6 @@ class SpeedController
   public:
     SpeedController(SpeedEncoder& speedEncoder, MotorController& motorController);
     void setPidParams(double Kp, double Ki, double Kd);
-    void setTicksPerRevolution(double ticksToRadians);
     void setSpeed(double speed); //set speed, radians per second
     double getSpeed(); //return current speed, radians per second
     double getPower(); //return current motor commanded power (-100% to 100%)

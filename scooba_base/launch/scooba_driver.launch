@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+
+<launch>
+  <arg name="model" default="$(find scooba_base)/urdf/scooba.xacro"/>
+  <arg name="input_log_file" default=""/>
+  
+  <!--load urdf -->
+  <param name="robot_description" command="$(find xacro)/xacro.py '$(arg model)'" />
+  
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"
+    respawn="false"/>
+  
+  <group if="$(eval input_log_file == '')">
+    <!-- Load joint controller configurations from YAML file to parameter server -->
+    <rosparam file="$(find scooba_base)/cfg/scooba_control.yaml" command="load"/>
+    
+    <!-- controller manager -->
+    <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
+      output="screen" args="scooba joint_state_controller"/>
+  
+    <!-- joint controller -->
+    <node name="scooba_base_driver_node" pkg="scooba_base" type="scooba_base_node">
+      <remap from="scooba/cmd_vel" to="cmd_vel"/>
+      <remap from="scooba/odom" to="odom"/>
+    </node>
+    
+    <!-- serial interface to motors -->
+    <node name="scooba_serial_interface" pkg="rosserial_python" output="screen" type="serial_node.py">
+        <rosparam param="pid_constants">[0.1, 0.5, 0.0]</rosparam>
+    </node>/>
+
+    <param name="use_sim_time" value="false"/>
+  </group>
+
+  <group if="$(eval input_log_file != '')">
+
+    <node name="log_playback" pkg="rosbag" type="play" args="$(arg input_log_file) --clock"/>
+    <param name="use_sim_time" value="true"/>
+
+  </group>
+
+
+
+
+</launch>

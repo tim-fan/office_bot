@@ -41,17 +41,21 @@ ros::NodeHandle  nh;
 void setLeftMotorSpeed( const std_msgs::Float32& motorSpeed){
   leftMotorController.setSpeed(motorSpeed.data);
 }
-ros::Subscriber<std_msgs::Float32> subLeft("left_motor_speed", setLeftMotorSpeed );
+ros::Subscriber<std_msgs::Float32> subLeft("left_wheel_speed", setLeftMotorSpeed );
 
 void setRightMotorSpeed( const std_msgs::Float32& motorSpeed){
   rightMotorController.setSpeed(motorSpeed.data);
 }
-ros::Subscriber<std_msgs::Float32> subRight("right_motor_speed", setRightMotorSpeed );
+ros::Subscriber<std_msgs::Float32> subRight("right_wheel_speed", setRightMotorSpeed );
 
 std_msgs::Int32 leftWheelTicksMsg;
 ros::Publisher leftTicksPublisher("left_wheel_ticks", &leftWheelTicksMsg);
 std_msgs::Int32 rightWheelTicksMsg;
 ros::Publisher rightTicksPublisher("right_wheel_ticks", &rightWheelTicksMsg);
+std_msgs::Float32 leftWheelSpeedMsg;
+ros::Publisher leftSpeedPublisher("left_wheel_speed_feedback", &leftWheelSpeedMsg);
+std_msgs::Float32 rightWheelSpeedMsg;
+ros::Publisher rightSpeedPublisher("right_wheel_speed_feedback", &rightWheelSpeedMsg);
 
 //params for speed control.
 //Will be set as ROS params
@@ -82,6 +86,8 @@ void setup() {
   nh.subscribe(subRight);
   nh.advertise(leftTicksPublisher);
   nh.advertise(rightTicksPublisher);
+  nh.advertise(leftSpeedPublisher);
+  nh.advertise(rightSpeedPublisher);
   while(!nh.connected()) {
     nh.spinOnce();
     flashLed(1000);
@@ -92,18 +98,10 @@ void setup() {
     nh.spinOnce();
     flashLed(500);
   }
-  while (!nh.getParam("~ticks_per_revolution", &ticksPerRevolution )) {
-    nh.spinOnce();
-    flashLed(500);
-  }
 
   //pass params to controllers
   leftMotorController.setPidParams(pid_constants[0],pid_constants[1],pid_constants[2]);
   rightMotorController.setPidParams(pid_constants[0],pid_constants[1],pid_constants[2]);  
-  
-  //for reference, ticks per rev for scooba motor = 402.7 calculated by averaging ticks over 10 revolutions
-  leftMotorController.setTicksPerRevolution(ticksPerRevolution);
-  rightMotorController.setTicksPerRevolution(ticksPerRevolution);
 
   //start encoders
   attachEncoderInterrupts();
@@ -117,10 +115,15 @@ void loop() {
 
   if (millis() > nextPublishTime){
     nextPublishTime += publishPeriod;
-    leftWheelTicksMsg.data = leftEncoder.getTicksSinceStart();
-    leftTicksPublisher.publish(&leftWheelTicksMsg);
+    leftWheelTicksMsg.data = leftEncoder.getTicksSinceStart();    
     rightWheelTicksMsg.data = rightEncoder.getTicksSinceStart();
+    leftWheelSpeedMsg.data = leftEncoder.getSpeed();
+    rightWheelSpeedMsg.data = rightEncoder.getSpeed();
+    
+    leftTicksPublisher.publish(&leftWheelTicksMsg);
     rightTicksPublisher.publish(&rightWheelTicksMsg);
+    leftSpeedPublisher.publish(&leftWheelSpeedMsg);
+    rightSpeedPublisher.publish(&rightWheelSpeedMsg);
   }
   
   nh.spinOnce();
