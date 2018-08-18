@@ -3,6 +3,7 @@
 <launch>
   <arg name="model" default="$(find scooba_base)/urdf/scooba.xacro"/>
   <arg name="input_log_file" default=""/>
+  <arg name="cmd_vel_topic" default="cmd_vel"/>
   
   <!--load urdf -->
   <param name="robot_description" command="$(find xacro)/xacro.py '$(arg model)'" />
@@ -20,7 +21,7 @@
   
     <!-- joint controller -->
     <node name="scooba_base_driver_node" pkg="scooba_base" type="scooba_base_node">
-      <remap from="scooba/cmd_vel" to="cmd_vel"/>
+	  <remap from="scooba/cmd_vel" to="$(arg cmd_vel_topic)"/>
       <remap from="scooba/odom" to="odom"/>
     </node>
     
