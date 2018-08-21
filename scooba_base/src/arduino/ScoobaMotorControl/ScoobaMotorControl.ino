@@ -7,7 +7,7 @@
  * Currently used settings:
  * #elif defined(__AVR_ATmega328P__)                                                                                                                                                                                                              
  * 
- * typedef NodeHandle_<ArduinoHardware, 2, 2, 150, 150> NodeHandle;
+ * typedef NodeHandle_<ArduinoHardware, 2, 4, 150, 150> NodeHandle;
  * 
  * Note in my case, the memory issues were manifesting as failure to 
  * read PID parameters.

@@ -45,7 +45,19 @@ void SpeedController::update(){
   _encoder.setDirection(_motor.getPower() >= 0 ? 1 : -1);
   
   _currentSpeed = getSpeed();
-  _pidController.Compute();
-  _motor.setPower(_motorPower);
-//  Serial.println(String(_pidController.GetKp()));
+  _pidController.Compute(); 
+  
+  //when setpoint is zero, send zero power
+  //(workaround for annoying pwm hum when stationary)
+  //ToDo: set pwm freq. out of audible region
+  if (_setpointSpeed == 0)
+  {
+    _pidController.SetMode(MANUAL);
+    _motor.setPower(0);
+  }
+  else {
+    _pidController.SetMode(AUTOMATIC);
+    _motor.setPower(_motorPower);
+  }
+
 }
