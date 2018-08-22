@@ -5,16 +5,17 @@
 <launch>
   <arg name="joy_device" default="/dev/input/js0"/>
   <arg name="cmd_topic" default="cmd_vel" doc="Topic to publish velocity commands to"/>
-  
-  <node name="joy" pkg="joy" type="joy_node">
-    <param name="dev" value="$(arg joy_device)"/> 
-    <param name="autorepeat_rate" value="5"/>
-  </node>  
-  
-  <node name="joy_to_twist" pkg="teleop_twist_joy" type="teleop_node">
-    <param name="scale_linear" value="0.5"/> 
-    <param name="scale_angular" value="2"/> 
-    <remap from="cmd_vel" to="$(arg cmd_topic)"/> 
-  </node> 
-  
+ 
+  <group ns="$(anon joy)">
+    <node name="joy" pkg="joy" type="joy_node">
+      <param name="dev" value="$(arg joy_device)"/> 
+      <param name="autorepeat_rate" value="5"/>
+    </node>  
+    
+    <node name="joy_to_twist" pkg="teleop_twist_joy" type="teleop_node">
+      <param name="scale_linear" value="0.5"/> 
+      <param name="scale_angular" value="2"/> 
+      <remap from="cmd_vel" to="$(arg cmd_topic)"/> 
+    </node> 
+  </group>  
 </launch>
