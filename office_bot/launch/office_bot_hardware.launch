@@ -27,7 +27,7 @@
     </node>
 
     <include file="$(find office_bot)/launch/joystick_teleop.launch">
-        <arg name="cmd_topic" value="yocs_cmd_vel_mux/input/joystick"/>
+        <arg name="cmd_topic" value="/yocs_cmd_vel_mux/input/joystick"/>
     </include>
     <param name="tango/publish_pose_on_tf" value="false"/>
 </launch>
