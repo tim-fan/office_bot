@@ -19,7 +19,11 @@
 
 
     <!--include file="$(find office_bot)/launch/imu.launch"/-->
-    <node name="camera" pkg="cv_camera" type="cv_camera_node"/>
+    <node name="camera" pkg="cv_camera" type="cv_camera_node">
+        <param name="image_width" value="100"/>
+        <param name="image_height" value="100"/>
+    </node>
+
     <node name="laser" pkg="urg_node" type="urg_node">
         <remap from="scan" to="scan_unfiltered"/>
         <param name="calibrate_time" value="true"/>
