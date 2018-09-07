@@ -20,8 +20,9 @@
 
     <!--include file="$(find office_bot)/launch/imu.launch"/-->
     <node name="camera" pkg="cv_camera" type="cv_camera_node">
-        <param name="image_width" value="100"/>
-        <param name="image_height" value="100"/>
+        <param name="image_width" value="320"/>
+        <param name="image_height" value="240"/>
+        <param name="camera_info_url" value="package://office_bot/cfg/fisheyeCamCal.yaml"/>
     </node>
 
     <node name="laser" pkg="urg_node" type="urg_node">

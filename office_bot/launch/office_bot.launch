@@ -21,4 +21,6 @@
         <remap from="scan_filtered" to="scan"/>
     </node>
 
+    <node ns="camera" pkg="image_proc" type="image_proc" name="camera_undistortion"/>
+
 </launch>
