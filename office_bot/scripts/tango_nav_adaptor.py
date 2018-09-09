@@ -153,6 +153,9 @@ def nav_adaptor():
     
     odomPublishRate = rospy.Rate(10) # 10hz
     odomPublisher = OdomPublisher()
+
+    rospy.logwarn('This node is deprecated - see tango_nav_adaptor for more efficient cpp implementation')
+
     while not rospy.is_shutdown():
         odomPublisher.publish()
         try:

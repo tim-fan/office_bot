@@ -3,6 +3,15 @@
 #include <tf2_ros/transform_broadcaster.h>
 #include "tf/transform_datatypes.h"
 
+// node for connecting tango_ros_streamer outputs to nav stack.
+// responsible for:
+//  updating timestamps to current time (tango timestamps have been way off - haven't debugged yet)
+//  renaming frame ids
+//
+// see tango_nav_adaptor.py for a first implementation, which is rewritten here in cpp
+// for efficiency reasons.
+
+
 geometry_msgs::TransformStamped project_to_2d(geometry_msgs::TransformStamped tf3d)
 {
     //given a 3d transform, return that transform projected down onto the z=0 plane
