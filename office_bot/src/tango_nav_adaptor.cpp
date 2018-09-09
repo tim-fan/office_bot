@@ -16,6 +16,13 @@ geometry_msgs::TransformStamped project_to_2d(geometry_msgs::TransformStamped tf
 {
     //given a 3d transform, return that transform projected down onto the z=0 plane
     double yaw = tf::getYaw(tf3d.transform.rotation);
+
+    //for tango position, rotate so that x axis points forward
+    if (tf3d.child_frame_id == "device")
+    {
+        yaw+= M_PI/2;
+    }
+
     geometry_msgs::Quaternion quaternionYawOnly = tf::createQuaternionMsgFromYaw(yaw);
     geometry_msgs::TransformStamped tfProjected = geometry_msgs::TransformStamped(tf3d);
     tfProjected.transform.translation.z = 0;
