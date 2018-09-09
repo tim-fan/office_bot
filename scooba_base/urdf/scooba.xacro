@@ -54,7 +54,7 @@
       <geometry>
         <cylinder  length="0.015" radius="0.02"/>
       </geometry>
-      <material name="black"/>
+      <material name="grey"/>
     </visual>
   </link>
 
@@ -78,7 +78,7 @@
       <geometry>
         <cylinder  length="0.015" radius="0.02"/>
       </geometry>
-      <material name="black"/>
+      <material name="grey"/>
     </visual>
   </link>
   
@@ -96,7 +96,7 @@
       <geometry>
         <cylinder length="0.05" radius="0.03"/>
       </geometry>
-      <material name="black"/>
+      <material name="grey"/>
     </visual>
   </link>
   
@@ -108,16 +108,16 @@
 
   <link name="tango">
     <visual>
-      <origin xyz="0 -0.05 0" rpy="0 0 0"/>
+      <origin xyz="0 0 0.15" rpy="0 0 0"/>
       <geometry>
-         <box size="0.2 0.12 0.01"/>
+         <box size="0.01 0.2 0.12"/>
       </geometry>
-      <material name="black"/>
+      <material name="grey"/>
     </visual>
   </link>
 
   <joint type="fixed" name="tango_to_base_joint">
-    <origin rpy="0 1.571 1.571" xyz="0 -0.2 0.05"/>
+    <origin rpy="0 0 0" xyz="-0.05 0 0"/>
     <child link="base_link"/>
     <parent link="tango"/>
   </joint>
@@ -126,17 +126,17 @@
   <link name="camera_link">
     <visual>
       <geometry>
-        <box size="0.03 0.04 0.04"/>
+        <box size="0.04 0.04 0.03"/>
       </geometry>
-      <material name="black"/>
+      <material name="grey"/>
     </visual>
 
     <visual>
-      <origin xyz="0 0 0.0" rpy="0 0 0"/>
+      <origin xyz="0 0 0.015" rpy="0 0 0"/>
       <geometry>
-        <cylinder length="0.04" radius="0.01"/>
+        <cylinder length="0.02" radius="0.01"/>
       </geometry>
-      <material name="blue"/>
+      <material name="grey"/>
     </visual>
   </link>
   <xacro:optionally_adjustable_joint link_name="camera_link" xyz="0.03 0.0 0.27" rpy="1.37 3.14 1.64" adjustable="false"/>
