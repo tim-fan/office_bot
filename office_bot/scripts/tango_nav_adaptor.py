@@ -162,6 +162,8 @@ def nav_adaptor():
             odomPublishRate.sleep()
         except rospy.exceptions.ROSTimeMovedBackwardsException as e:
             rospy.logwarn(e)
+   
+    rospy.spin() 
 
 if __name__ == '__main__':
     nav_adaptor()

@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<!-- 
+URDF file to represent a single adjustable link (e.g. position of a sensor)
+
+Intended for quick-and-dirty extrinsic calibration
+
+Uses multiple joints in order to make sensor positions adjustable 
+through the joint state publishing gui
+
+Rotations implemented as intrinsic yaw-pitch-roll, so that the 
+adjustment values can be copied directly into a fixed joint (extrinsic
+roll-pitch-yaw)
+
+It is assumed that 'base_link' and ${link_name} are already defined
+-->
+
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="rig">
+    <xacro:macro name="adjustable_joint" params="link_name xyz">
+    
+        <link name="${link_name}_adjustment_base"/>
+        <link name="${link_name}_roll"/>
+        <link name="${link_name}_pitch"/>
+        <link name="${link_name}_yaw"/>
+         
+        <joint name="base_to_${link_name}_adjustment_base" type="fixed">
+          <parent link="base_link"/>
+          <child link="${link_name}_adjustment_base"/>
+          <origin xyz="${xyz}" rpy="0 0 0"/>
+        </joint>
+    
+        <joint name="${link_name}_adjust_yaw" type="continuous">
+          <parent link="${link_name}_adjustment_base"/>
+          <child link="${link_name}_yaw"/>
+          <axis xyz="0 0 1"/>
+          <origin xyz="0 0 0" rpy="0 0 0"/>
+        </joint>
+    
+        <joint name="${link_name}_adjust_pitch" type="continuous">
+          <parent link="${link_name}_yaw"/>
+          <child link="${link_name}_pitch"/>
+          <axis xyz="0 1 0"/>
+          <origin xyz="0 0 0" rpy="0 0 0"/>
+        </joint>
+    
+        <joint name="${link_name}_adjust_roll" type="continuous">
+          <parent link="${link_name}_pitch"/>
+          <child link="${link_name}_roll"/>
+          <axis xyz="1 0 0"/>
+          <origin xyz="0 0 0" rpy="0 0 0"/>
+        </joint>
+    
+        <joint name="${link_name}_roll_to_${link_name}" type="fixed">
+          <parent link="${link_name}_roll"/>
+          <child link="${link_name}"/>
+          <origin xyz="0 0 0" rpy="0 0 0"/>
+        </joint> 
+    
+    </xacro:macro>
+</robot>        

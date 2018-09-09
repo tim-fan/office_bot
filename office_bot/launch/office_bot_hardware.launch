@@ -20,13 +20,15 @@
 
     <!--include file="$(find office_bot)/launch/imu.launch"/-->
     <node name="camera" pkg="cv_camera" type="cv_camera_node">
+        <param name="device_id" value="0" />
+        <param name="frame_id" value="camera_link"/>
         <param name="image_width" value="320"/>
         <param name="image_height" value="240"/>
         <param name="camera_info_url" value="package://office_bot/cfg/fisheyeCamCal.yaml"/>
     </node>
 
     <node name="laser" pkg="urg_node" type="urg_node">
-        <remap from="scan" to="scan_unfiltered"/>
+        <!--remap from="scan" to="scan_unfiltered"/-->
         <param name="calibrate_time" value="true"/>
         <param name="frame_id" value="laser_link"/>
     </node>

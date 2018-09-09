@@ -101,14 +101,14 @@
   </link>
   
   <joint type="fixed" name="base_to_laser_link_joint">
-    <origin rpy="0 0 0" xyz="0.1 -0.05 0.07"/>
+    <origin rpy="0 0 0" xyz="0.12 -0.05 0.09"/>
     <child link="laser_link"/>
     <parent link="base_link"/>
   </joint>
 
   <link name="tango">
     <visual>
-      <origin xyz="0 0.0 0" rpy="0 0 0"/>
+      <origin xyz="0 -0.05 0" rpy="0 0 0"/>
       <geometry>
          <box size="0.2 0.12 0.01"/>
       </geometry>
@@ -121,5 +121,24 @@
     <child link="base_link"/>
     <parent link="tango"/>
   </joint>
+
+  <xacro:include filename="$(find office_bot)/urdf/optionally_adjustable_joint.urdf.xacro"/>
+  <link name="camera_link">
+    <visual>
+      <geometry>
+        <box size="0.03 0.04 0.04"/>
+      </geometry>
+      <material name="black"/>
+    </visual>
+
+    <visual>
+      <origin xyz="0 0 0.0" rpy="0 0 0"/>
+      <geometry>
+        <cylinder length="0.04" radius="0.01"/>
+      </geometry>
+      <material name="blue"/>
+    </visual>
+  </link>
+  <xacro:optionally_adjustable_joint link_name="camera_link" xyz="0.03 0.0 0.27" rpy="1.37 3.14 1.64" adjustable="false"/>
 
 </robot>

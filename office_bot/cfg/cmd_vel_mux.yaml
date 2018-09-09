@@ -18,10 +18,10 @@ subscribers:
     short_desc:  "Navigation stack controller"
   - name:        "Onboard joystick"
     topic:       "input/joystick"
-    timeout:     0.1
+    timeout:     1.0
     priority:    10
   - name:        "Remote control"
     topic:       "input/remote"
-    timeout:     0.1
+    timeout:     1.0
     priority:    9
 publisher:       "output/cmd_vel"
