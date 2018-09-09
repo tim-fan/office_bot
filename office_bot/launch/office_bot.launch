@@ -21,6 +21,12 @@
         <remap from="scan_filtered" to="scan"/>
     </node-->
 
-    <!--node ns="camera" pkg="image_proc" type="image_proc" name="camera_undistortion"/-->
+    <node name="laser_angle_filter" pkg="laser_filters" type="scan_to_scan_filter_chain">
+        <rosparam command="load" file="$(find office_bot)/cfg/laser_angular_bound_filter.yaml"/>
+        <remap from="scan" to="scan_unfiltered"/>
+        <remap from="scan_filtered" to="scan"/>
+    </node>
+
+    <node ns="camera" pkg="image_proc" type="image_proc" name="camera_undistortion"/>
 
 </launch>

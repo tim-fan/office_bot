@@ -1,3 +1,4 @@
+<?xml version="1.0"?> 
 <launch>
 
   <!-- Navigation parameter files -->
@@ -19,6 +20,6 @@
   <node name="waypoint_provider" pkg="yocs_waypoint_provider" type="waypoint_provider">
     <param name="filename" value="$(find office_bot_navigation)/config/test_waypoints.yaml"/>
   </node>
-  <node name="goal_publisher" pkg="rostopic" type="rostopic" args="pub /nav_ctrl yocs_msgs/NavigationControl --file $(find office_bot_navigation)/config/startPatrolMsg.yaml" respawn="true" respawn_delay="10"/>
+  <node name="goal_publisher" pkg="rostopic" type="rostopic" args="pub /nav_ctrl yocs_msgs/NavigationControl --file $(find office_bot_navigation)/config/startPatrolMsg.yaml" respawn="false" respawn_delay="10"/>
 
 </launch>
