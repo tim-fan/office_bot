@@ -45,6 +45,11 @@
   <run_depend>navigation</run_depend>
   <run_depend>joy</run_depend> 
   <run_depend>teleop_twist_joy</run_depend> 
+  <run_depend>urg_node</run_depend> 
+  <run_depend>cv_camera</run_depend>
+  <run_depend>diff_drive_controller</run_depend>
+  <run_depend>joint_state_controller</run_depend>
+
 
   <!-- The export tag contains other, unspecified, tags -->
   <export>
