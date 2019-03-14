@@ -49,6 +49,8 @@
   <run_depend>cv_camera</run_depend>
   <run_depend>diff_drive_controller</run_depend>
   <run_depend>joint_state_controller</run_depend>
+  <run_depend>laser_filters</run_depend>
+  <run_depend>yocs_cmd_vel_mux</run_depend>
 
 
   <!-- The export tag contains other, unspecified, tags -->
