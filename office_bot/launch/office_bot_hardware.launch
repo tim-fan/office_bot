@@ -5,7 +5,7 @@
 
 <launch>
     <!--arg name="chassis" default="red_robot" doc="which robot chassis to use"/-->
-    <arg name="chassis" default="scooba" doc="which robot chassis to use"/>
+    <arg name="chassis" default="create2" doc="which robot chassis to use"/>
     
     <!-- motor driver -->
     <include file="$(find red_robot_base)/launch/red_robot_driver.launch" if="$(eval chassis=='red_robot')"/>
@@ -16,12 +16,15 @@
         <arg name="model" value="$(find office_bot)/urdf/box_bot.xacro"/>
         <arg name="cmd_vel_topic" value="cmd_vel_boosted"/>
     </include>
+    <include file="$(find office_bot)/launch/create2.launch" if="$(eval chassis=='create2')">
+        <arg name="cmd_vel_topic" value="yocs_cmd_vel_mux/output/cmd_vel"/>
+    </include>
 
 
     <!--include file="$(find office_bot)/launch/imu.launch"/-->
-    <node name="camera" pkg="cv_camera" type="cv_camera_node">
-        <param name="device_id" value="0" />
-        <param name="frame_id" value="camera_link"/>
+    <node name="fisheye_camera" pkg="cv_camera" type="cv_camera_node">
+        <param name="device_path" value="/dev/fisheyeCamera" />
+        <param name="frame_id" value="fisheye_camera_link"/>
         <param name="rate" value="20"/>
         <param name="image_width" value="320"/>
         <param name="image_height" value="240"/>

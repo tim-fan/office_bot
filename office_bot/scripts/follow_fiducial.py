@@ -25,66 +25,79 @@ def transformToPose(t): # (geometry_msgs.msg._Transform.Transform) -> geometry_m
     p.position.z = t.translation.z
     return p
 
-def generateMotionCmd(fiducialMsg, tfBuffer):
+class FiducialTracker:
     """
-    Given the current state of fiducial tracking, determine the appropriate control output
+    Class for tracking a fiducial target.
+    Will publish a motion command to move towards the target, or 
+    if no target is seen, will repeat the last command
     """
 
-    followDistance = 0.8
-    cmdVel = Twist() #the output command
+    def __init__(self):
+        self.lastCmd = Twist()
 
-    fiducialsDetected = len(fiducialMsg.transforms) > 0 
-
-    if fiducialsDetected:
-        # follow the largest visible fiducial
-        largestFiducialSize = min(f.fiducial_area for f in fiducialMsg.transforms)
-        fiducialToFollow = filter(lambda f : f.fiducial_area == largestFiducialSize, fiducialMsg.transforms)[0]
-
-        #get position of fiducial in robot frame
-        fiducialFrame = 'fiducial_{}'.format(fiducialToFollow.fiducial_id)
-        fiducialTfStamped = TransformStamped(
-            header = fiducialMsg.header,
-            child_frame_id = fiducialFrame,
-            transform = fiducialToFollow.transform
-        )
-        
-        try:
-            # not sure why, but I can't seem to transform another transform message - need to convert to pose first
-            fiducialPoseRobotCentric = tfBuffer.transform(
-                object_stamped=PoseStamped(
-                    header = fiducialTfStamped.header,
-                    pose = transformToPose(fiducialTfStamped.transform)
-                ),
-                target_frame='base_link'
+    def publishMotionCmd(self, fiducialMsg, tfBuffer, publisher):
+        """
+        Given the current state of fiducial tracking, determine the appropriate control output
+        """
+    
+        followDistance = 0.8
+        cmdVel = Twist() #the output command
+    
+        fiducialsDetected = len(fiducialMsg.transforms) > 0 
+    
+        if fiducialsDetected:
+            # follow the largest visible fiducial
+            largestFiducialSize = max(f.fiducial_area for f in fiducialMsg.transforms)
+            fiducialToFollow = filter(lambda f : f.fiducial_area == largestFiducialSize, fiducialMsg.transforms)[0]
+    
+            #get position of fiducial in robot frame
+            fiducialFrame = 'fiducial_{}'.format(fiducialToFollow.fiducial_id)
+            fiducialTfStamped = TransformStamped(
+                header = fiducialMsg.header,
+                child_frame_id = fiducialFrame,
+                transform = fiducialToFollow.transform
             )
-        except (tf2_ros.LookupException, tf2_ros.ConnectivityException, tf2_ros.ExtrapolationException) as e:
-            #failed to transform pose for some reason - just return a zero vel command
-            rospy.logwarn(e)
-            return cmdVel
-
-        #find the current angle to the fiducial
-        angleToFiducial = atan2(fiducialPoseRobotCentric.pose.position.y, fiducialPoseRobotCentric.pose.position.x)
-        targetAngle = pi #aim to have fiducial behind the robot
-        wrapAngle = lambda x : ((x + pi) % (2*pi)) - pi
-        angleError = wrapAngle(angleToFiducial - targetAngle)
-        
-        #use proportional control to aim at person
-        pGainAngVel = 1.0
-        cmdVel.angular.z = angleError * pGainAngVel
-
-        distanceToFiducial = fiducialPoseRobotCentric.pose.position.x
-        distanceError = distanceToFiducial - followDistance
-        pGainVel = 1.0
-        maxVel = 1.0
-        correctionVel = distanceError * pGainVel
-        #apply max/min
-        correctionVel = min(correctionVel, maxVel)
-        correctionVel = max(correctionVel, -maxVel)
-        
-        cmdVel.linear.x = correctionVel
-
-        
-    return cmdVel
+            
+            try:
+                # not sure why, but I can't seem to transform another transform message - need to convert to pose first
+                fiducialPoseRobotCentric = tfBuffer.transform(
+                    object_stamped=PoseStamped(
+                        header = fiducialTfStamped.header,
+                        pose = transformToPose(fiducialTfStamped.transform)
+                    ),
+                    target_frame='base_link'
+                )
+            except (tf2_ros.LookupException, tf2_ros.ConnectivityException, tf2_ros.ExtrapolationException) as e:
+                #failed to transform pose for some reason - just return a zero vel command
+                rospy.logwarn(e)
+                return cmdVel
+    
+            #find the current angle to the fiducial
+            angleToFiducial = atan2(fiducialPoseRobotCentric.pose.position.y, fiducialPoseRobotCentric.pose.position.x)
+            targetAngle = pi #aim to have fiducial behind the robot
+            wrapAngle = lambda x : ((x + pi) % (2*pi)) - pi
+            angleError = wrapAngle(angleToFiducial - targetAngle)
+            
+            #use proportional control to aim at person
+            pGainAngVel = 1.0
+            cmdVel.angular.z = angleError * pGainAngVel
+    
+            distanceToFiducial = fiducialPoseRobotCentric.pose.position.x
+            distanceError = distanceToFiducial - followDistance
+            pGainVel = 1.0
+            maxVel = 1.0
+            correctionVel = distanceError * pGainVel
+            #apply max/min
+            correctionVel = min(correctionVel, maxVel)
+            correctionVel = max(correctionVel, -maxVel)
+            
+            #cmdVel.linear.x = correctionVel
+            cmdVel.linear.x = 0
+    
+            publisher.publish(cmdVel)
+    
+        else:
+            publisher.publish(self.lastCmd())
 
 
 if __name__ == '__main__':
@@ -96,7 +109,8 @@ if __name__ == '__main__':
         listener = tf2_ros.TransformListener(tfBuffer)
 
         cmdPub = rospy.Publisher('cmd_vel', Twist, queue_size=1)
-        controlCallback = lambda trackingMsg : cmdPub.publish(generateMotionCmd(trackingMsg, tfBuffer))
+        fiducialTracker = FiducialTracker()
+        controlCallback = lambda trackingMsg : fiducialTracker.publishMotionCmd(trackingMsg, tfBuffer, cmdPub)
         trackingSub = rospy.Subscriber('fiducial_transforms', FiducialTransformArray, controlCallback)
         rospy.spin()
     except rospy.ROSInterruptException:
