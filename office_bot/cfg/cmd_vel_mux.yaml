@@ -20,12 +20,8 @@ subscribers:
     topic:       "input/joystick"
     timeout:     1.0
     priority:    10
-  - name:        "Fiducial tracking"
-    topic:       "input/fiducial_tracking"
-    timeout:     1.0
-    priority:    8
-  - name:        "Person tracking"
-    topic:       "input/person_tracking"
+  - name:        "Offboard joystick"
+    topic:       "input/remote"
     timeout:     1.0
     priority:    9
 publisher:       "output/cmd_vel"
