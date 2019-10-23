@@ -33,7 +33,7 @@ class FiducialTracker:
     """
 
     def __init__(self):
-        self.lastCmd = Twist()
+        self.currentCmd = Twist()
 
     def publishMotionCmd(self, fiducialMsg, tfBuffer, publisher):
         """
@@ -93,11 +93,10 @@ class FiducialTracker:
             
             #cmdVel.linear.x = correctionVel
             cmdVel.linear.x = 0
+            
+            self.currentCmd = cmdVel
     
-            publisher.publish(cmdVel)
-    
-        else:
-            publisher.publish(self.lastCmd())
+        publisher.publish(self.currentCmd)
 
 
 if __name__ == '__main__':

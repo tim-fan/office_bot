@@ -4,16 +4,6 @@
  -->
 
 <launch>
-  <arg name="description_file" default="" doc="If provided, will publish the given urdf.xacro"/>
-
-  <group if="$(eval description_file != '')">
-    <param name="robot_description" command="$(find xacro)/xacro --inorder '$(arg description_file)'" />
-    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>
-  </group>
-
-  <node name="rviz" pkg="rviz" type="rviz" required="true"
-      args="-d $(find office_bot)/cfg/cartographer_view.rviz" />
-
   <node name="cartographer_node" pkg="cartographer_ros"
       type="cartographer_node" args="
           -configuration_directory $(find office_bot)/cfg
