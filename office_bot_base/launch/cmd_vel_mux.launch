@@ -1,15 +1,16 @@
+<?xml version="1.0"?>
 <!--
   YOCS Velocity Multiplexer launcher
   -->
 
 <launch>
   <arg name="nodelet_manager_name"  default="nodelet_manager"/>
-  <arg name="config_file"           default="$(find office_bot)/cfg/cmd_vel_mux.yaml"/>
+  <arg name="config_file"           default="$(find office_bot_base)/cfg/cmd_vel_mux.yaml"/>
   
   <!-- nodelet manager -->
   <node pkg="nodelet" type="nodelet" name="$(arg nodelet_manager_name)" args="manager"/>
 
-  <node pkg="nodelet" type="nodelet" name="yocs_cmd_vel_mux"
+  <node pkg="nodelet" type="nodelet" name="cmd_vel_mux"
         args="load yocs_cmd_vel_mux/CmdVelMuxNodelet $(arg nodelet_manager_name)">
     <param name="yaml_cfg_file" value="$(arg config_file)"/>
   </node>

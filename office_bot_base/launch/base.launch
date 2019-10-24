@@ -4,19 +4,18 @@
  -->
 
 <launch>
-    <!-- motor driver -->
-    <include file="$(find office_bot)/launch/hardware/create2.launch">
-        <arg name="cmd_vel_topic" value="yocs_cmd_vel_mux/output/cmd_vel"/>
+
+    <include file="$(find office_bot_base)/launch/create2.launch">
+        <arg name="cmd_vel_topic" value="cmd_vel_mux/output/cmd_vel"/>
     </include>
 
-
     <node name="fisheye_camera" pkg="cv_camera" type="cv_camera_node">
-        <param name="device_path" value="/dev/fisheyeCamera" />
+        <param name="device_path" value="/dev/fisheyeCamera"/>
         <param name="frame_id" value="fisheye_camera_link"/>
         <param name="rate" value="20"/>
         <param name="image_width" value="320"/>
         <param name="image_height" value="240"/>
-        <param name="camera_info_url" value="package://office_bot/cfg/fisheyeCamCal.yaml"/>
+        <param name="camera_info_url" value="package://office_bot_base/cfg/fisheyeCamCal.yaml"/>
     </node>
 
     <node name="laser" pkg="urg_node" type="urg_node">
@@ -25,7 +24,10 @@
         <param name="ip_address" value="192.168.0.10"/>
     </node>
 
-    <include file="$(find office_bot)/launch/hardware/joystick_teleop.launch">
-        <arg name="cmd_topic" value="/yocs_cmd_vel_mux/input/joystick"/>
+    <include file="$(find office_bot_base)/launch/cmd_vel_mux.launch"/>
+
+    <include file="$(find office_bot_base)/launch/joystick_teleop.launch">
+        <arg name="cmd_topic" value="/cmd_vel_mux/input/joystick"/>
     </include>
+
 </launch>

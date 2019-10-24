@@ -1,13 +1,11 @@
 <?xml version="1.0"?>
 <launch>
-    <include file="$(find office_bot)/launch/hardware/office_bot_hardware.launch"/>
+    <include file="$(find office_bot_base)/launch/base.launch"/>
     
     <!--include file="$(find office_bot_navigation)/launch/office_bot_nav.launch">
         <arg name="cmd_vel_topic" value="yocs_cmd_vel_mux/input/navigation"/>
     </include -->
 
-    
-    <include file="$(find office_bot)/launch/cmd_vel_mux.launch"/>
     
     <node name="tango_nav_adaptor" pkg="office_bot" type="tango_nav_adaptor"/>
 
