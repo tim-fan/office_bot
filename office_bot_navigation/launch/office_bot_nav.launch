@@ -5,7 +5,7 @@
   <arg name="move_base_include" default="$(find office_bot_navigation)/launch/include/move_base.launch.xml" />
   <arg name="cmd_vel_topic" default="cmd_vel"/>
 
-  <node name="map_server" pkg="map_server" type="map_server" args="$(find office_bot_navigation)/config/maps/nav_area.yaml"/>
+  <node name="map_server" pkg="map_server" type="map_server" args="$(find office_bot_navigation)/config/maps/nav_space.yaml"/>
 
   <!-- move the robot -->
   <include file="$(arg move_base_include)">
@@ -13,13 +13,13 @@
   </include>
 
   <!-- spam the patrol task -->
-  <node name="waypoint_nav" pkg="yocs_waypoints_navi" type="yocs_waypoints_navi_node">
+  <!--node name="waypoint_nav" pkg="yocs_waypoints_navi" type="yocs_waypoints_navi_node">
     <param name="goal_timeout" value="999999"/>
     <param name="robot_frame" value="base_link"/>
-  </node>
-  <node name="waypoint_provider" pkg="yocs_waypoint_provider" type="waypoint_provider">
+  </node-->
+  <!--node name="waypoint_provider" pkg="yocs_waypoint_provider" type="waypoint_provider">
     <param name="filename" value="$(find office_bot_navigation)/config/test_waypoints.yaml"/>
-  </node>
-  <node name="goal_publisher" pkg="rostopic" type="rostopic" args="pub /nav_ctrl yocs_msgs/NavigationControl --file $(find office_bot_navigation)/config/startPatrolMsg.yaml" respawn="false" respawn_delay="10"/>
+  </node-->
+  <node name="goal_publisher" pkg="rostopic" type="rostopic" args="pub /nav_ctrl yocs_msgs/NavigationControl --file $(find office_bot_navigation)/config/startPatrolMsg.yaml" respawn="false" respawn_delay="10" if="false"/>
 
 </launch>
