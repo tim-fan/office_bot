@@ -3,6 +3,7 @@
 <launch>
 
   <arg name="world_name" default="worlds/empty.world"/>
+  <arg name="publish_localisation_tf" default="true" doc="if true, runs node to publish map-to-odom tf"/>
 
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
     <arg name="world_name" value="$(arg world_name)"/> <!-- world_name is wrt GAZEBO_RESOURCE_PATH environment variable -->
@@ -14,5 +15,7 @@
   </include>
 
   <include file="$(find office_bot_gazebo)/launch/spawn_office_bot.launch"/>
+  
+  <node pkg="office_bot_gazebo" type="gazebo_localisation.py" name="location_publisher" if="$(arg publish_localisation_tf)"/>
 
 </launch>
