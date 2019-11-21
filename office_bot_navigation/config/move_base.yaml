@@ -1,6 +1,6 @@
 # Planner selection
 base_global_planner: "navfn/NavfnROS"
-base_local_planner: "base_local_planner/TrajectoryPlannerROS"
+base_local_planner: "teb_local_planner/TebLocalPlannerROS"
 
 # Recovery behaviors
 recovery_behavior_enabled: false
@@ -38,40 +38,56 @@ NavfnROS:
 # Local planner
 controller_frequency: 5.0
 controller_patience: 15.0
-TrajectoryPlannerROS:
-  # base vel/accel profile 
-  acc_lim_x: 0.15
-  acc_lim_y: 0.0
-  acc_lim_theta: 0.8
-  max_vel_x: 0.3
-  min_vel_x: -0.1
-  max_vel_y: 0.0
-  min_vel_y: 0.0
-  max_vel_theta: 0.5
-  min_vel_theta: -0.5
-  min_in_place_vel_theta: 0.5
-  holonomic_robot: false
 
-  # tolerances (defaults)
-  yaw_goal_tolerance: 0.2
-  xy_goal_tolerance: 0.4
-  latch_xy_goal_tolerance: true
-  # forward simulation
-  sim_time: 1.0
-  sim_granularity: 0.025
-  angular_sim_granularity: 0.025
-  vx_samples: 3
-  vtheta_samples: 10
-  # scoring (defaults)
-  meter_scoring: true
-  pdist_scale: 12.0
-  gdist_scale: 8.0
-  occdist_scale: 0.1
-  heading_lookahead: 0.325
-  heading_scoring_timestep: 0.8
-  heading_scoring: true
-  dwa: false
-  # other
-  oscillation_reset_dist: 0.05
-  # debug
-  publish_cost_grid_pc: false
+DWAPlannerROS:
+
+# Robot Configuration Parameters - Kobuki
+  max_vel_x: 0.5  # 0.55
+  min_vel_x: 0.0 
+
+  max_vel_y: 0.0  # diff drive robot
+  min_vel_y: 0.0  # diff drive robot
+
+  max_trans_vel: 0.5 # choose slightly less than the base's capability
+  min_trans_vel: 0.1  # this is the min trans velocity when there is negligible rotational velocity
+  trans_stopped_vel: 0.1
+
+  # Warning!
+  #   do not set min_trans_vel to 0.0 otherwise dwa will always think translational velocities
+  #   are non-negligible and small in place rotational velocities will be created.
+
+  max_rot_vel: 5.0  # choose slightly less than the base's capability
+  min_rot_vel: 0.4  # this is the min angular velocity when there is negligible translational velocity
+  rot_stopped_vel: 0.4
+  
+  acc_lim_x: 1.0 # maximum is theoretically 2.0, but we 
+  acc_lim_theta: 2.0
+  acc_lim_y: 0.0      # diff drive robot
+
+# Goal Tolerance Parameters
+  yaw_goal_tolerance: 0.3  # 0.05
+  xy_goal_tolerance: 0.15  # 0.10
+  # latch_xy_goal_tolerance: false
+
+# Forward Simulation Parameters
+  sim_time: 1.0       # 1.7
+  vx_samples: 6       # 3
+  vy_samples: 1       # diff drive robot, there is only one sample
+  vtheta_samples: 20  # 20
+
+# Trajectory Scoring Parameters
+  path_distance_bias: 64.0      # 32.0   - weighting for how much it should stick to the global path plan
+  goal_distance_bias: 24.0      # 24.0   - wighting for how much it should attempt to reach its goal
+  occdist_scale: 0.5            # 0.01   - weighting for how much the controller should avoid obstacles
+  forward_point_distance: 0.325 # 0.325  - how far along to place an additional scoring point
+  stop_time_buffer: 0.2         # 0.2    - amount of time a robot must stop in before colliding for a valid traj.
+  scaling_speed: 0.25           # 0.25   - absolute velocity at which to start scaling the robot's footprint
+  max_scaling_factor: 0.2       # 0.2    - how much to scale the robot's footprint when at speed.
+
+# Oscillation Prevention Parameters
+  oscillation_reset_dist: 0.05  # 0.05   - how far to travel before resetting oscillation flags
+
+# Debugging
+  publish_traj_pc : true
+  publish_cost_grid_pc: true
+  global_frame_id: odom
