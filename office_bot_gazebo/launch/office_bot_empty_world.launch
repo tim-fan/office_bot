@@ -18,4 +18,7 @@
   
   <node pkg="office_bot_gazebo" type="gazebo_localisation.py" name="location_publisher" if="$(arg publish_localisation_tf)"/>
 
+  <include file="$(find office_bot_base)/launch/cmd_vel_mux.launch"/>
+
+
 </launch>

@@ -24,4 +24,4 @@ subscribers:
     topic:       "input/remote"
     timeout:     1.0
     priority:    9
-publisher:       "output/cmd_vel"
+publisher:       "/cmd_vel"
