@@ -3,7 +3,7 @@
 
   <!-- Navigation parameter files -->
   <arg name="move_base_include" default="$(find office_bot_navigation)/launch/include/move_base.launch.xml" />
-  <arg name="cmd_vel_topic" default="cmd_vel"/>
+  <arg name="cmd_vel_topic" default="cmd_vel_mux/input/navigation"/>
 
   <node name="map_server" pkg="map_server" type="map_server" args="$(find office_bot_navigation)/config/maps/nav_space.yaml"/>
 
