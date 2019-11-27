@@ -8,8 +8,6 @@
   <arg name="z" default="0.0"/>
   <arg name="yaw" default="0.0"/>
 
-  <include file="$(find office_bot_description)/launch/description.launch"/>
-
   <!-- Spawn office bot in gazebo -->
   <node name="spawn_office_bot_model" pkg="gazebo_ros" type="spawn_model"
       args="-x $(arg x)
