@@ -3,7 +3,7 @@
 <launch>
 
   <arg name="world_name" value="$(find office_bot_gazebo)/worlds/cafe.world"/>
-  <arg name="publish_localisation_tf" default="true" doc="if true, runs node to publish map-to-odom tf"/>
+  <arg name="publish_localisation_tf" default="false" doc="if true, runs node to publish map-to-odom tf"/>
 
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
     <arg name="world_name" value="$(arg world_name)"/>

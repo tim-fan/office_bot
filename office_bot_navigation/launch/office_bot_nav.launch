@@ -5,7 +5,11 @@
   <arg name="move_base_include" default="$(find office_bot_navigation)/launch/include/move_base.launch.xml" />
   <arg name="cmd_vel_topic" default="cmd_vel_mux/input/navigation"/>
 
-  <node if="false" name="map_server" pkg="map_server" type="map_server" args="$(find office_bot_navigation)/config/maps/nav_space.yaml"/>
+  <arg name="map_yaml" default="$(find office_bot_navigation)/config/maps/cafe_world.yaml" doc="yaml file specifying the environment map" />
+
+  <include file="$(find amcl)/examples/amcl_diff.launch" />
+
+  <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_yaml)"/>
 
   <!-- move the robot -->
   <include file="$(arg move_base_include)">
