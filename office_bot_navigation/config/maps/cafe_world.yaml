@@ -1,6 +1,0 @@
-image: cafe_world.pgm
-resolution: 0.05
-origin: [-5.105440902709962, -11.11287631988526, 0]
-occupied_thresh: 0.51
-free_thresh: 0.49
-negate: 0
