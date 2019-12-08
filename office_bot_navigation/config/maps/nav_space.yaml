@@ -1,6 +1,0 @@
-image: nav_space.pgm
-resolution: 0.05
-origin: [-1.087675476074221, -7.295222473144534, 0]
-occupied_thresh: 0.51
-free_thresh: 0.49
-negate: 0
