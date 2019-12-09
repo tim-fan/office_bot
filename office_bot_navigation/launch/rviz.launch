@@ -1,0 +1,7 @@
+<?xml version="1.0"?> 
+<launch>
+
+  <!-- Launch RViz with config for viewing navigation -->
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find office_bot_navigation)/config/navigation.rviz"/>
+
+</launch>

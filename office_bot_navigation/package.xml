@@ -51,6 +51,8 @@
   <buildtool_depend>catkin</buildtool_depend>
   <exec_depend>cartographer_ros</exec_depend>
   <exec_depend>amcl</exec_depend>
+  <exec_depend>yocs_waypoints_navi</exec_depend> 
+  <exec_depend>yocs_waypoint_provider</exec_depend>
 
 
   <!-- The export tag contains other, unspecified, tags -->

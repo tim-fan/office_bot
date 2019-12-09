@@ -2,15 +2,17 @@ global_frame: map
 
 update_frequency: 5.0
 publish_frequency: 2.0
-#static_map: true
-static_map: false
-rolling_window: true
-width: 20.0
-height: 20.0
-resolution: 0.1
+static_map: true
+
+## config for rolling map:
+# static_map: false
+# rolling_window: true
+# width: 20.0
+# height: 20.0
+# resolution: 0.1
 
 plugins:
-# - {name: static_map,  type: "costmap_2d::StaticLayer"}
- - {name: obstacles,  type: "costmap_2d::ObstacleLayer"}
- - {name: inflater,   type: "costmap_2d::InflationLayer"}
+- {name: static_map,  type: "costmap_2d::StaticLayer"}
+# - {name: obstacles,  type: "costmap_2d::ObstacleLayer"}
+- {name: inflater,   type: "costmap_2d::InflationLayer"}
 

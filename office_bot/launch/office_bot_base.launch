@@ -11,7 +11,7 @@
     -->
 
     <arg name="mode" default="physical_robot" doc="how to launch the system ('physical_robot', 'gazebo', or 'bag_playback')" />
-    <arg name="gazebo_launch_name" default="office_bot_cafe_world.launch" doc="used only if mode=gazebo. Specifies which gazebo world lauch file to use for simulation (must reside under office_bot_gazebo/launch/)"/>
+    <arg name="gazebo_launch_name" default="office_bot_office_world.launch" doc="used only if mode=gazebo. Specifies which gazebo world lauch file to use for simulation (must reside under office_bot_gazebo/launch/)"/>
     <arg name="input_bag" default="" doc="used only if mode=bag_playback. Specifies path to bag to use for playback"/>
     
     <!--handle run-mode option-->
