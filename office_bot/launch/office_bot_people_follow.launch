@@ -1,0 +1,67 @@
+<?xml version="1.0"?>
+<launch>
+    <include file="$(find office_bot_base)/launch/base.launch"/>
+    
+    <!--include file="$(find office_bot_navigation)/launch/office_bot_nav.launch">
+        <arg name="cmd_vel_topic" value="yocs_cmd_vel_mux/input/navigation"/>
+    </include -->
+
+    
+    <node name="tango_nav_adaptor" pkg="office_bot" type="tango_nav_adaptor"/>
+
+    <!--node name="laser_filter" pkg="laser_filters" type="scan_to_scan_filter_chain">
+        <rosparam command="load" file="$(find office_bot)/cfg/laser_range_filter.yaml"/>
+        <remap from="scan" to="scan_unfiltered"/>
+        <remap from="scan_filtered" to="scan"/>
+    </node-->
+
+    <node name="laser_angle_filter" pkg="laser_filters" type="scan_to_scan_filter_chain">
+        <rosparam command="load" file="$(find office_bot)/cfg/laser_angular_bound_filter.yaml"/>
+        <remap from="scan" to="scan_unfiltered"/>
+        <remap from="scan_filtered" to="scan"/>
+    </node>
+
+
+    <node name="tf_base_footprint" pkg="tf" type="static_transform_publisher" args="0 0 1.1 0 0 0 base_footprint rgbd_front_top_link 10"/>	
+    <include file="$(find realsense_spencer_adaptor)/launch/realsense_people_tracking.launch" >
+        <arg name="visualization" value="false"/>
+        <arg name="dummy_transforms" value="false"/>
+    </include>
+   
+    <!--- fiducial tracking w. fisheye camera --> 
+    <group>
+        <node ns="fisheye_camera" pkg="image_proc" type="image_proc" name="camera_undistortion"/>
+    
+        <node name="fiducial_input_throttle" pkg="topic_tools" type="throttle" args="messages /fisheye_camera/image_raw 5"/>
+    
+        <node name="fiducial_extraction" pkg="aruco_detect" type="aruco_detect" ns="fisheye_camera">
+            <remap from="/camera" to="image_raw_throttle"/>
+            <remap from="/camera_info" to="camera_info"/>
+            <param name="dictionary" value="0"/>
+            <param name="fiducial_len" value="0.129"/>
+            <param name="publish_images" value="true"/>
+        </node>
+        <node name="tf_base_fisheye" pkg="tf" type="static_transform_publisher" args="0 0 1.1 1.570796 0 -1.5707960 base_footprint fisheye_camera_link 10"/>	
+        <node name="follow_fiducial" pkg="office_bot" type="follow_fiducial.py">
+            <remap from="cmd_vel" to="/yocs_cmd_vel_mux/input/fiducial_tracking"/>
+        </node>
+    
+    </group>
+
+    <node name="follow_person" pkg="office_bot" type="follow_person.py">
+        <remap from="tracked_persons" to="/spencer/perception/tracked_persons"/>
+        <remap from="cmd_vel" to="/yocs_cmd_vel_mux/input/person_tracking"/>
+    </node>
+
+    <node name="reminders" pkg="office_bot" type="remind_timesheets.py">
+        <remap from="tracked_persons" to="/spencer/perception/tracked_persons"/>
+    </node>
+
+    <include file="$(find sound_play)/soundplay_node.launch">
+        <env name="XDG_RUNTIME_DIR" value="/run/user/1001"/>
+    </include>
+    
+    <!-- nuc battery shuts down if not enough current drawn - this script prevents that -->
+    <!--node name="burn_power" pkg="office_bot" type="burn_power.sh"/-->
+
+</launch>

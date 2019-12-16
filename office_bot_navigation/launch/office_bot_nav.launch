@@ -4,6 +4,7 @@
   <!-- Navigation parameter files -->
   <arg name="move_base_include" default="$(find office_bot_navigation)/launch/include/move_base.launch.xml" />
   <arg name="cmd_vel_topic" default="cmd_vel_mux/input/navigation"/>
+  <arg name="patrol" default="true" doc="Set true to start office office patrol"/>
 
   <arg name="map_yaml" default="$(find office_bot_navigation)/config/maps/office_map.yaml" doc="yaml file specifying the environment map" />
 
@@ -17,7 +18,7 @@
   </include>
 
   <!-- spam the patrol task -->
-  <node name="goal_publisher" pkg="rostopic" type="rostopic" args="pub /nav_ctrl yocs_msgs/NavigationControl --file $(find office_bot_navigation)/config/startPatrolMsg.yaml" respawn="true" respawn_delay="10"/>
+  <node name="goal_publisher" pkg="rostopic" type="rostopic" args="pub /nav_ctrl yocs_msgs/NavigationControl --file $(find office_bot_navigation)/config/startPatrolMsg.yaml" respawn="true" respawn_delay="10" if="$(eval patrol)"/>
 
   <node name="waypoint_nav" pkg="yocs_waypoints_navi" type="yocs_waypoints_navi_node">
     <param name="goal_timeout" value="999999"/>
