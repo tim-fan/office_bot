@@ -1,7 +1,38 @@
 <?xml version="1.0"?>
 <launch>
-    <include file="$(find office_bot)/launch/office_bot_base.launch"/>
-    <include file="$(find office_bot_navigation)/launch/office_bot_nav.launch">
-        <arg name="patrol" value="false"/>
-    </include>
+    <!-- main launch file for office bot -->
+    <!-- arg 'mode' can be used to switch between real-world, simulation and log playback modes -->
+
+    <arg name="mode" default="physical_robot" doc="how to launch the system ('physical_robot', 'gazebo', or 'bag_playback')" />
+    <arg name="gazebo_launch_name" default="office_bot_in_carpet_world.launch" doc="used only if mode=gazebo. Specifies which gazebo world lauch file to use for simulation (must reside under office_bot_gazebo/launch/)"/>
+    <arg name="input_bag" default="" doc="used only if mode=bag_playback. Specifies path to bag to use for playback"/>
+    
+    <!--handle run-mode options-->
+    <group>   
+        <group if="$(eval mode == 'physical_robot')" >
+            <include file="$(find office_bot_base)/launch/base.launch"/>
+            <param name="use_sim_time" value="false"/>
+        </group>
+
+        <group if="$(eval mode == 'gazebo')">
+            <include file="$(find office_bot_gazebo)/launch/$(arg gazebo_launch_name)"/>
+            <param name="use_sim_time" value="true"/>
+        </group>
+
+        <group if="$(eval mode == 'bag_playback')">
+            <node if="$(eval mode == 'bag_playback')" name="log_playback" pkg="rosbag" type="play"
+                args="$(arg input_log_file) --clock"/>
+            <param name="use_sim_time" value="true"/>
+        </group>
+    </group>
+
+    <!-- run-mode-independent systems: -->
+
+    <group>
+        <include file="$(find office_bot_description)/launch/description.launch"/>
+        <include file="$(find twist_mux)/launch/twist_mux.launch"/>
+    </group>
+
+
+
 </launch>

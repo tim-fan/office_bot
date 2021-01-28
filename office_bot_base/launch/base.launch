@@ -29,4 +29,6 @@
 
     <param name="use_sim_time" value="false"/>
 
+    <include file="twist_mux/launch/twist_mux.launch"/>
+
 </launch>

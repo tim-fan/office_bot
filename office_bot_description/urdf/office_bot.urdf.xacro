@@ -1,7 +1,8 @@
 <?xml version="1.0" ?>
 <robot name="roomba" xmlns:xacro="http://ros.org/wiki/xacro">
-  <xacro:include filename="$(find office_bot_description)/urdf/create_2.urdf.xacro" />
+  <xacro:include filename="$(find create_description)/urdf/create_2.urdf.xacro" />
   <xacro:include filename="$(find office_bot_description)/urdf/hokuyo.urdf.xacro" />
+  <xacro:include filename="$(find office_bot_description)/urdf/carpet_cam.urdf.xacro" />
 
   <xacro:hokuyo_laser xyz="0 0 0.1" rpy="0 0 0" parent="base_link" />
 
