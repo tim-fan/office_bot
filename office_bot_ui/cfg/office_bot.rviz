@@ -6,6 +6,7 @@ Panels:
       Expanded:
         - /Grid1/Offset1
         - //ground_truth/state1/Shape1
+        - //text_marker1
       Splitter Ratio: 0.41916167736053467
     Tree Height: 393
   - Class: rviz/Selection
@@ -342,7 +343,15 @@ Visualization Manager:
       Marker Topic: /move_base/TebLocalPlannerROS/teb_markers
       Name: /move_base/TebLocalPlannerROS/teb_markers
       Namespaces:
-        {}
+        TebContainer: true
+      Queue Size: 100
+      Value: true
+    - Class: rviz/Marker
+      Enabled: true
+      Marker Topic: /text_marker
+      Name: /text_marker
+      Namespaces:
+        "": true
       Queue Size: 100
       Value: true
   Enabled: true
@@ -382,7 +391,7 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Scale: 52.823978424072266
+      Scale: 112.80132293701172
       Target Frame: <Fixed Frame>
       X: 8.527637481689453
       Y: 7.520758628845215

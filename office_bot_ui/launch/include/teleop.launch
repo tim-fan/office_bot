@@ -1,5 +1,6 @@
+<?xml version="1.0"?>
 <launch>
-  <arg name="cmd_vel_topic" default="input_joy/cmd_vel"/>
+  <arg name="cmd_vel_topic" default="joy_vel"/>
   <arg name="joy_dev" default="/dev/input/js0" />
   <arg name="config_filepath" default="$(find office_bot_ui)/cfg/xbox.config.yaml" />
   

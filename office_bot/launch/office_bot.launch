@@ -30,9 +30,11 @@
 
     <group>
         <include file="$(find office_bot_description)/launch/description.launch"/>
-        <include file="$(find twist_mux)/launch/twist_mux.launch">
-            <arg name="cmd_vel_out" value="velocity_smoother/raw_cmd_vel"/>
-        </include>
+        <node pkg="twist_mux" type="twist_mux" name="twist_mux" output="screen">
+            <remap from="cmd_vel_out" to="velocity_smoother/raw_cmd_vel"/>
+            <rosparam file="$(find twist_mux)/config/twist_mux_locks.yaml"  command="load"/>
+            <rosparam file="$(find twist_mux)/config/twist_mux_topics.yaml" command="load"/>
+        </node>
         <include file="$(find office_bot)/launch/include/velocity_smoother.launch"/>
     </group>
 

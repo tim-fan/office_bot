@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<!-- run rviz and teleop joy -->
+<launch>
+  <include file="$(find office_bot_ui)/launch/include/teleop.launch"/>
+  <include file="$(find office_bot_ui)/launch/include/rviz.launch"/>
+</launch>
