@@ -6,4 +6,15 @@
 
   <xacro:hokuyo_laser xyz="0 0 0.1" rpy="0 0 0" parent="base_link" />
 
+
+  <!-- gazebo: ground truth pose publisher -->
+  <gazebo>
+      <plugin name="p3d_base_controller" filename="libgazebo_ros_p3d.so">
+          <alwaysOn>true</alwaysOn>
+          <updateRate>50.0</updateRate>
+          <bodyName>base_link</bodyName>
+          <topicName>ground_truth/state</topicName>
+          <frameName>map</frameName>
+      </plugin>
+  </gazebo>
 </robot>
