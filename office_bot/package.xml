@@ -46,6 +46,8 @@
   <run_depend>joy</run_depend> 
   <run_depend>teleop_twist_joy</run_depend> 
   <run_depend>laser_filters</run_depend>
+  <run_depend>twist_mux</run_depend>
+  <run_depend>cob_base_velocity_smoother</run_depend>
 
 
   <!-- The export tag contains other, unspecified, tags -->
