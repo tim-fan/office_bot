@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<launch>
+rosrun cob_base_velocity_smoother velocity_smoother
+    <node pkg="cob_base_velocity_smoother" type="velocity_smoother" name="velocity_smoother">
+        <rosparam command="load" file="$(find office_bot)/cfg/velocity_smoother.cfg"/>
+        <remap from="velocity_smoother/smooth_cmd_vel" to="/cmd_vel"/>
+        <remap from="velocity_smoother/odometry" to="/odom"/>
+    </node>
+</launch>
