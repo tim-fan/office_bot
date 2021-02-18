@@ -3,7 +3,7 @@
     <!-- main launch file for office bot -->
     <!-- arg 'mode' can be used to switch between real-world, simulation and log playback modes -->
 
-    <arg name="mode" default="physical_robot" doc="how to launch the system ('physical_robot', 'gazebo', or 'bag_playback')" />
+    <arg name="mode" default="physical_robot" doc="how to launch the system ('physical_robot', 'gazebo', 'no_base', or 'bag_playback')" />
     <arg name="gazebo_launch_name" default="office_bot_in_carpet_world.launch" doc="used only if mode=gazebo. Specifies which gazebo world lauch file to use for simulation (must reside under office_bot_gazebo/launch/)"/>
     <arg name="input_bag" default="" doc="used only if mode=bag_playback. Specifies path to bag to use for playback"/>
     
@@ -23,6 +23,11 @@
             <node if="$(eval mode == 'bag_playback')" name="log_playback" pkg="rosbag" type="play"
                 args="$(arg input_log_file) --clock"/>
             <param name="use_sim_time" value="true"/>
+        </group>
+
+        <group if="$(eval mode == 'no_base')">
+            <!-- do nothing -->
+            <!-- this mode is for use when the base or simulation is already launched -->
         </group>
     </group>
 

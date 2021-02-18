@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="config" default="$(find create_bringup)/config/default.yaml" />
+
+  <node name="create_driver" pkg="create_driver" type="create_driver" output="screen" respawn="true">
+    <rosparam command="load" file="$(arg config)" />
+    <param name="robot_model" value="CREATE_2" />
+  </node>
+
+</launch>

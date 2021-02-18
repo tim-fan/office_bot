@@ -4,9 +4,7 @@
  -->
 
 <launch>
-    <include file="$(find office_bot_base)/launch/create2.launch">
-        <arg name="cmd_vel_topic" value="cmd_vel"/>
-    </include>
+    <include file="$(find office_bot_base)/launch/create_2.launch"/>
 
     <node name="fisheye_camera" pkg="cv_camera" type="cv_camera_node">
         <param name="device_path" value="/dev/fisheyeCamera"/>
