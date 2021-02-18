@@ -49,8 +49,8 @@
   <!-- Use doc_depend for packages you need only for building documentation: -->
   <!--   <doc_depend>doxygen</doc_depend> -->
   <buildtool_depend>catkin</buildtool_depend>
-  <exec_depend>yocs_waypoints_navi</exec_depend> 
-  <exec_depend>yocs_waypoint_provider</exec_depend>
+  <!--exec_depend>yocs_waypoints_navi</exec_depend--> 
+  <!--exec_depend>yocs_waypoint_provider</exec_depend-->
 
 
   <!-- The export tag contains other, unspecified, tags -->
