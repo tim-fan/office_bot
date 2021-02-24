@@ -6,19 +6,21 @@
 <launch>
     <include file="$(find office_bot_base)/launch/create_2.launch"/>
 
-    <node name="fisheye_camera" pkg="cv_camera" type="cv_camera_node">
+    <node name="carpet_cam" pkg="cv_camera" type="cv_camera_node">
         <param name="device_path" value="/dev/fisheyeCamera"/>
-        <param name="frame_id" value="fisheye_camera_link"/>
+        <param name="frame_id" value="carpet_camera_link"/>
         <param name="rate" value="20"/>
         <param name="image_width" value="320"/>
         <param name="image_height" value="240"/>
         <param name="camera_info_url" value="package://office_bot_base/cfg/fisheyeCamCal.yaml"/>
     </node>
 
-    <node name="laser" pkg="urg_node" type="urg_node">
+    <node name="laser" pkg="urg_node" type="urg_node" respawn="true">
         <param name="calibrate_time" value="true"/>
         <param name="frame_id" value="laser_link"/>
         <param name="ip_address" value="192.168.0.10"/>
+        <param name="angle_min" value="-2.1"/>
+        <param name="angle_max" value="2.1"/>
     </node>
 
     <param name="use_sim_time" value="false"/>
