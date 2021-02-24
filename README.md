@@ -11,3 +11,9 @@ Uses ROS Navigation stack for localisation, path planning and execution.
 * office_bot_gazebo: launch files to run office bot in simulation
 * office_bot_navigation: launch/config for office bot nav stack
 * office_bot_ui: for launching rviz + joystick control on remote machine
+
+## TODO:
+
+* add obstacles from bumper activation
+* ability to patrol list of named locations
+* add D435 obstacle detection
