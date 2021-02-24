@@ -41,6 +41,9 @@
             <rosparam file="$(find twist_mux)/config/twist_mux_topics.yaml" command="load"/>
         </node>
         <include file="$(find office_bot)/launch/include/velocity_smoother.launch"/>
+
+        <include file="$(find carpet_localisation)/launch/include/office_localisation.launch"/>
+        <include file="$(find office_bot_navigation)/launch/office_bot_nav.launch"/>
     </group>
 
 
