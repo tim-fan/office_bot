@@ -1,4 +1,6 @@
 <?xml version="1.0"?>
 <launch>
-    <node name="rviz" pkg="rviz" type="rviz" args="-d $(find office_bot_ui)/cfg/office_bot.rviz" respawn="true"/>
+    <!-- running two rviz instances, one for global overview, one for local nav view -->
+    <node name="rviz_global" pkg="rviz" type="rviz" args="-d $(find office_bot_ui)/cfg/office_bot.rviz" respawn="true"/>
+    <node name="rviz_local" pkg="rviz" type="rviz" args="-d $(find office_bot_ui)/cfg/office_bot_local_nav.rviz" respawn="true"/>
 </launch>
