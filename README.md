@@ -17,3 +17,4 @@ Uses ROS Navigation stack for localisation, path planning and execution.
 * add obstacles from bumper activation
 * ability to patrol list of named locations
 * add D435 obstacle detection
+* system for autotuning carpet localsiation params
