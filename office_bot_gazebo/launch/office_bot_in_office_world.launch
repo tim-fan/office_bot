@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- launch an office simulation world and spawn office bot -->
+
+  <!-- launch carpet world -->
+  <include file="$(find office_bot_gazebo)/launch/include/office_world.launch" />
+
+  <!-- Spawn the robot into Gazebo -->
+  <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="-param robot_description -urdf -model office_bot -x 10 -y 10" />
+
+</launch>

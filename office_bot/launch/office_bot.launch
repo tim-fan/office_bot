@@ -4,7 +4,7 @@
     <!-- arg 'mode' can be used to switch between real-world, simulation and log playback modes -->
 
     <arg name="mode" default="physical_robot" doc="how to launch the system ('physical_robot', 'gazebo', 'no_base', or 'bag_playback')" />
-    <arg name="gazebo_launch_name" default="office_bot_in_carpet_world.launch" doc="used only if mode=gazebo. Specifies which gazebo world lauch file to use for simulation (must reside under office_bot_gazebo/launch/)"/>
+    <arg name="gazebo_launch_name" default="office_bot_in_office_world.launch" doc="used only if mode=gazebo. Specifies which gazebo world lauch file to use for simulation (must reside under office_bot_gazebo/launch/)"/>
     <arg name="input_bag" default="" doc="used only if mode=bag_playback. Specifies path to bag to use for playback"/>
     
     <!--handle run-mode options-->
@@ -12,18 +12,28 @@
         <group if="$(eval mode == 'physical_robot')" >
             <include file="$(find office_bot_base)/launch/base.launch"/>
             <param name="use_sim_time" value="false"/>
+            <include file="$(find carpet_localisation)/launch/include/office_localisation.launch">
+                <arg name="classifier_param_file" value="$(find carpet_localisation)/cfg/office_gmm_params.json" />
+            </include>
+            
         </group>
 
         <group if="$(eval mode == 'gazebo')">
             <include file="$(find office_bot_gazebo)/launch/$(arg gazebo_launch_name)"/>
             <param name="use_sim_time" value="true"/>
+            <include file="$(find carpet_localisation)/launch/include/office_localisation.launch">
+                <arg name="classifier_param_file" value="$(find carpet_localisation)/gazebo/carpet_world_gmm_model/gmm_params.json" />
+            </include>
         </group>
 
         <group if="$(eval mode == 'bag_playback')">
             <node if="$(eval mode == 'bag_playback')" name="log_playback" pkg="rosbag" type="play"
                 args="$(arg input_log_file) --clock"/>
             <param name="use_sim_time" value="true"/>
-        </group>
+
+            <include file="$(find carpet_localisation)/launch/include/office_localisation.launch">
+                <arg name="classifier_param_file" value="$(find carpet_localisation)/cfg/office_gmm_params.json" />
+            </include>        </group>
 
         <group if="$(eval mode == 'no_base')">
             <!-- do nothing -->
@@ -42,7 +52,7 @@
         </node>
         <include file="$(find office_bot)/launch/include/velocity_smoother.launch"/>
 
-        <include file="$(find carpet_localisation)/launch/include/office_localisation.launch"/>
+
         <include file="$(find office_bot_navigation)/launch/office_bot_nav.launch"/>
     </group>
 
