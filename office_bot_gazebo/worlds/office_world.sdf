@@ -9,7 +9,7 @@
     </include>
     <gui fullscreen='0'>
       <camera name='user_camera'>
-        <pose>10 10 25 0 1.57079632679 1.57079632679</pose>
+        <pose>24.5253 11.6434 22.8179 -1.6e-05 1.5698 1.56002</pose>
         <view_controller>ortho</view_controller>
         <projection_type>orthographic</projection_type>
       </camera>
