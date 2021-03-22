@@ -9,9 +9,6 @@
     <arg name="map_topic" value="carpet_map_outline"/>
   </include>
 
-  <!-- spam the patrol task -->
-  <node name="goal_publisher" pkg="rostopic" type="rostopic" args="pub /nav_ctrl yocs_msgs/NavigationControl --file $(find office_bot_navigation)/config/startPatrolMsg.yaml" respawn="true" respawn_delay="10" if="$(eval patrol)"/>
-
   <!-- <node name="waypoint_nav" pkg="yocs_waypoints_navi" type="yocs_waypoints_navi_node">
     <param name="goal_timeout" value="999999"/>
     <param name="robot_frame" value="base_link"/>
