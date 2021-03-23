@@ -3,21 +3,12 @@
 
   <arg name="patrol" default="true" doc="Set true to start office office patrol"/>
 
+  <!-- serve global costmap -->
+  <node name="map_server" pkg="map_server" type="map_server" args="$(find office_bot_navigation)/config/office_map.yaml"/>
+
   <!-- move the robot -->
   <include file="$(find office_bot_navigation)/launch/include/move_base.launch.xml">
     <arg name="cmd_vel_topic" value="nav_vel"/>
-    <arg name="map_topic" value="carpet_map_outline"/>
-  </include>
-
-  <!-- <node name="waypoint_nav" pkg="yocs_waypoints_navi" type="yocs_waypoints_navi_node">
-    <param name="goal_timeout" value="999999"/>
-    <param name="robot_frame" value="base_link"/>
-  </node> -->
-
-  <!-- <node name="waypoint_provider" pkg="yocs_waypoint_provider" type="waypoint_provider">
-    <param name="filename" value="$(find office_bot_navigation)/config/office_waypoints.yaml"/>
-  </node> -->
-
-  
+  </include>  
 
 </launch>
