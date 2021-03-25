@@ -6,6 +6,8 @@
     <arg name="mode" default="physical_robot" doc="how to launch the system ('physical_robot', 'gazebo', 'no_base', or 'bag_playback')" />
     <arg name="gazebo_launch_name" default="office_bot_in_office_world.launch" doc="used only if mode=gazebo. Specifies which gazebo world lauch file to use for simulation (must reside under office_bot_gazebo/launch/)"/>
     <arg name="input_bag" default="" doc="used only if mode=bag_playback. Specifies path to bag to use for playback"/>
+    <arg name="log_pf_inputs" default="false" doc="set true to record particle filter inputs for offline playback" />
+
     
     <!--handle run-mode options-->
     <group>   
@@ -14,6 +16,7 @@
             <param name="use_sim_time" value="false"/>
             <include file="$(find carpet_localisation)/launch/include/office_localisation.launch">
                 <arg name="classifier_param_file" value="$(find carpet_localisation)/cfg/office_gmm_params.json" />
+                <arg name="log_inputs" value="$(arg log_pf_inputs)"/>
             </include>
             
         </group>
@@ -23,6 +26,8 @@
             <param name="use_sim_time" value="true"/>
             <include file="$(find carpet_localisation)/launch/include/office_localisation.launch">
                 <arg name="classifier_param_file" value="$(find carpet_localisation)/gazebo/carpet_world_gmm_model/gmm_params.json" />
+                <arg name="subscribe_ground_truth" value="true"/>
+                <arg name="log_inputs" value="$(arg log_pf_inputs)"/>
             </include>
         </group>
 
@@ -33,6 +38,7 @@
 
             <include file="$(find carpet_localisation)/launch/include/office_localisation.launch">
                 <arg name="classifier_param_file" value="$(find carpet_localisation)/cfg/office_gmm_params.json" />
+                <arg name="log_inputs" value="$(arg log_pf_inputs)"/>
             </include>
         </group>
 
