@@ -1,0 +1,54 @@
+---
+# note: to determine waypoint poses, use 2D Pose Estimate tool in RViz, while in a 
+# terminal running: rostopic echo /initialpose
+  - name: nav
+    position: 
+      x: 4.972107410430908
+      y: 5.469023704528809
+      z: 0.0
+    orientation: 
+      x: 0.0
+      y: 0.0
+      z: 0.7033354995161333
+      w: 0.7108580555359778
+  - name: conference
+    position: 
+      x: 17.991479873657227
+      y: 12.793688774108887
+      z: 0.0
+    orientation: 
+      x: 0.0
+      y: 0.0
+      z: -0.00011119727400731822
+      w: 0.9999999938175831
+  - name: elevator
+    position: 
+      x: 28.01335334777832
+      y: 12.534485816955566
+      z: 0.0
+    orientation: 
+      x: 0.0
+      y: 0.0
+      z: -0.7024563266264138
+      w: 0.7117268501205537
+  - name: design
+    position: 
+      x: 34.128719329833984
+      y: 9.860610008239746
+      z: 0.0
+    orientation: 
+      x: 0.0
+      y: 0.0
+      z: -0.00011106284341526867
+      w: 0.9999999938325224
+  - name: systems
+    position: 
+      x: 43.12389373779297
+      y: 14.946666717529297
+      z: 0.0
+    orientation: 
+      x: 0.0
+      y: 0.0
+      z: -0.7071849325786066
+      w: 0.7070286211560262
+
