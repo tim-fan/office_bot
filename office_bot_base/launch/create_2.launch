@@ -1,10 +1,13 @@
 <?xml version="1.0"?>
 <launch>
-  <arg name="config" default="$(find create_bringup)/config/default.yaml" />
+  <arg name="config" default="$(find office_bot_base)/cfg/create.yaml" />
+  <arg name="odom_topic" default="odom" doc="topic name to which to publish odometry" />
+
 
   <node name="create_driver" pkg="create_driver" type="create_driver" output="screen" respawn="true">
     <rosparam command="load" file="$(arg config)" />
     <param name="robot_model" value="CREATE_2" />
+    <remap from="odom" to="$(arg odom_topic)" />
   </node>
 
 </launch>

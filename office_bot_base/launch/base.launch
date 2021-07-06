@@ -4,7 +4,11 @@
  -->
 
 <launch>
-    <include file="$(find office_bot_base)/launch/create_2.launch"/>
+    <arg name="odom_topic" default="odom" doc="topic name to which to publish odometry" />
+
+    <include file="$(find office_bot_base)/launch/create_2.launch">
+        <arg name="odom_topic" value="$(arg odom_topic)"/>
+    </include>
 
     <node name="carpet_cam" pkg="cv_camera" type="cv_camera_node">
         <param name="device_path" value="/dev/fisheyeCamera"/>
@@ -15,7 +19,7 @@
         <param name="camera_info_url" value="package://office_bot_base/cfg/fisheyeCamCal.yaml"/>
     </node>
 
-    <node name="laser" pkg="urg_node" type="urg_node" respawn="true">
+    <node name="laser" pkg="urg_node" type="urg_node" respawn="true" output="screen">
         <param name="calibrate_time" value="true"/>
         <param name="frame_id" value="laser_link"/>
         <param name="ip_address" value="192.168.0.10"/>
