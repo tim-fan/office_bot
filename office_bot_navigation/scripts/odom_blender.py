@@ -1,24 +1,48 @@
 #!/usr/bin/env python
 
-# Problem: I want an odom message which uses the pose from scan_matching (which is good)
+# Problem: I want an odom message which uses the pose from cartographer (which is good)
 # and the velocity from the create (which is also good)
-# Solution: this node subs to the create odom and scan matcher pose, and fuses the two in a 
+# Solution: this node subs to the create odom and cartographer pose (from tf), and fuses the two in a 
 # single output odom message
 
 import rospy
 from geometry_msgs.msg import PoseStamped
 from nav_msgs.msg import Odometry
+import tf2_ros
+
 
 class Blender:
     def __init__(self):
 
         self.odom_pub = rospy.Publisher("odom_fused", Odometry, queue_size=10)
         self.odom_sub = rospy.Subscriber("odom", Odometry, self.update_odom)
-        self.pose_sub = rospy.Subscriber("pose_stamped", PoseStamped, self.update_pose_and_publish)
-        self.last_odom = None
+        self.tf_buffer = tf2_ros.Buffer()
+        self.tf_listener = tf2_ros.TransformListener(self.tf_buffer)
     
     def update_odom(self, odom_msg:Odometry):
-        self.last_odom = odom_msg
+        """
+        Fuse recieved odom with odom pose from tf, then republish
+        """
+        try:
+            current_odom_tf = self.tf_buffer.lookup_transform("odom", "base_link", rospy.Time(0))
+        except (tf2_ros.LookupException, tf2_ros.ConnectivityException, tf2_ros.ExtrapolationException) as e:
+            rospy.logwarn(e)
+            return
+
+        # print("-------------odom_msg:")
+        # print(f"{odom_msg.pose.pose}")
+        # print("-------------odom_tf:")
+        # print(f"{current_odom_tf.transform}" )
+        # print("")
+
+        odom_msg.pose.pose.position = current_odom_tf.transform.translation
+        odom_msg.pose.pose.orientation = current_odom_tf.transform.rotation
+
+        # print("-------------odom_msg fused:")
+        # print(f"{odom_msg.pose.pose}")
+
+        self.odom_pub.publish(odom_msg)
+
     
     def update_pose_and_publish(self, pose_stamped_msg:PoseStamped):
         if self.last_odom is None:
