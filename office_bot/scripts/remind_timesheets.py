@@ -4,7 +4,7 @@
 #subscribes to person detections for input, and publishes to cmd_vel to control the robot
 
 import rospy
-from spencer_tracking_msgs.msg import TrackedPersons
+#from spencer_tracking_msgs.msg import TrackedPersons
 import random 
 from sound_play.libsoundplay import SoundClient
 
@@ -39,6 +39,11 @@ class TimesheetReminder:
         ]
         
         self.soundhandle = SoundClient()
+        rospy.sleep(3)
+        self.sayText("This is a test")
+        rospy.sleep(3)
+        import sys
+        sys.exit(1)
         
     def sayText(self, text):
         useFestival = False
@@ -55,6 +60,7 @@ class TimesheetReminder:
     
         peopleDetected = len(trackedPersonsMsg.tracks) > 0
     
+        peopleDetected = True
         if peopleDetected:
             #choose the track with the lowest id to follow (ie the person who was seen first)
             minTrackingId = min(track.track_id for track in trackedPersonsMsg.tracks)
@@ -78,7 +84,7 @@ if __name__ == '__main__':
         rospy.init_node('timesheet_reminder')
         
         reminder = TimesheetReminder() 
-        trackingSub = rospy.Subscriber('tracked_persons', TrackedPersons, reminder.remindTimesheets, queue_size=1)
+        #trackingSub = rospy.Subscriber('tracked_persons', TrackedPersons, reminder.remindTimesheets, queue_size=1)
         rospy.spin()
     except rospy.ROSInterruptException:
         pass

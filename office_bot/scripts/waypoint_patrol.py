@@ -48,17 +48,21 @@ if __name__ == '__main__':
         rospy.init_node('movebase_client_py')
         waypoint_file = rospy.get_param("~waypoint_file")
         waypoints = parse_waypoints(waypoint_file)
-
-        while not rospy.is_shutdown():
+        done = False
+        while not rospy.is_shutdown() and not done:
         
             for waypoint_name, waypoint_pose in waypoints:
                 print(waypoint_name)
                 print(waypoint_pose)
                 print()
                 result = movebase_client(waypoint_pose)
+                if waypoint_name.lower != "waypoint":
+                    rospy.sleep(2) 
                 if result:
                     rospy.loginfo("Goal execution done!")
             # repeat in the opposite direction
             waypoints.reverse()
+
+            done = True
     except rospy.ROSInterruptException:
         rospy.loginfo("Navigation test finished.")

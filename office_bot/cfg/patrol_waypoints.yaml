@@ -2,15 +2,15 @@
 # note: to determine waypoint poses, use 2D Pose Estimate tool in RViz, while in a 
 # terminal running: rostopic echo /initialpose
   - name: nav
-    position: 
-      x: 4.972107410430908
-      y: 5.469023704528809
+    position:
+      x: 5.91375589371
+      y: 7.75318479538
       z: 0.0
-    orientation: 
+    orientation:
       x: 0.0
       y: 0.0
-      z: 0.7033354995161333
-      w: 0.7108580555359778
+      z: 0.0192202098177
+      w: 0.999815274706
   - name: conference
     position: 
       x: 17.991479873657227

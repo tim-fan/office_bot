@@ -40,7 +40,7 @@ controller_frequency: 5.0
 controller_patience: 15.0
 
 TebLocalPlannerROS:
-
+  transform_tollerance: 2.0
   # acceleration limits - should match those defined in velocity_smoother.cfg
   acc_lim_x: 0.5
   acc_lim_y: 0.7
@@ -51,6 +51,7 @@ TebLocalPlannerROS:
   max_vel_theta: 2.0
 
   xy_goal_tolerance: 1.0
-  yaw_goal_tolerance: 0.78
+  yaw_goal_tolerance: 0.13
+  free_goal_vel: true
   
   min_obstacle_dist: 0.4 
